@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
+import org.example.carsharing_server.Booking.Booking;
 import org.example.carsharing_server.CarMaintenance.CarMaintenance;
 import org.example.carsharing_server.Location.Location;
+import org.example.carsharing_server.User.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,28 +18,94 @@ import java.util.List;
 public class Car {
 
     @Id
-    @Column(unique=true)
+    @Column(unique = true)
     @Pattern(regexp = "[a-zA-Z].. [0-9]..")
     private String licensePlate;
     private String model;
     private int releaseYear;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", referencedColumnName = "location_id")
+    @JoinColumn(name = "locationID", referencedColumnName = "locationID")
     private Location location;
     private boolean availabilityStatus;
 
-    @OneToMany(mappedBy="licensePlate", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<CarMaintenance> maintenanceRecord;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", referencedColumnName = "userweId")
+    @JoinColumn(name = "userID", referencedColumnName = "userID")
     private User owner;
 
 
-    @OneToMany(mappedBy= "licensePlate", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Booking> bookings;
+
+
+    public Car() {
+
+    }
+
+    public Car(String model, int releaseYear, String licensePlate, Location location, User owner) {
+        this.model = model;
+        this.releaseYear = releaseYear;
+        this.licensePlate = licensePlate;
+        this.maintenanceRecord = new ArrayList<CarMaintenance>();
+        this.location = location;
+        this.availabilityStatus = true;
+        this.owner = owner;
+        this.bookings = new ArrayList<>();
+
+    }
+
+
+    public String getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public boolean getAvailabilityStatus() {
+        return availabilityStatus;
+    }
+
+    public void setAvailabilityStatus(boolean availabilityStatus) {
+        this.availabilityStatus = availabilityStatus;
+    }
+
+    public List<CarMaintenance> getMaintenanceRecord() {
+        return maintenanceRecord;
+    }
+
+    public void addMaintenance(CarMaintenance maintenance) {
+        maintenanceRecord.add(maintenance);
+    }
 
     public List<Booking> getBookings() {
         return bookings;
@@ -56,72 +124,8 @@ public class Car {
     }
 
 
-    public Car() {
-
-    }
-    public Car(String model, int releaseYear,  String licensePlate, Location location, User owner) {
-        this.model = model;
-        this.releaseYear = releaseYear;
-        this.licensePlate = licensePlate;
-        this.maintenanceRecord = new ArrayList<CarMaintenance>();
-        this.location = location;
-        this.availabilityStatus = true;
-        this.owner = owner;
-
-    }
-
-
-
-    public String getLicensePlate(){
-        return licensePlate;
-    }
-
-    public void setLicensePlate(String licensePlate){
-        this.licensePlate = licensePlate;
-    }
-
-    public String getModel(){
-        return model;
-    }
-
-    public void setModel(String model){
-        this.model = model;
-    }
-    public int getReleaseYear()
-    {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(int releaseYear){
-        this.releaseYear = releaseYear;
-    }
-
-    public Location getLocation(){
-        return location;
-    }
-
-    public void setLocation(Location location){
-        this.location=location;
-    }
-
-    public boolean getAvailabilityStatus(){
-        return availabilityStatus;
-    }
-
-    public void setAvailabilityStatus(boolean avaliabilityStatus){
-        this.availabilityStatus=avaliabilityStatus;
-    }
-
-    public List<CarMaintenance> getMaintenanceRecord(){
-        return maintenanceRecord;
-    }
-
-    public void addMaintenance(CarMaintenance maintenance){
-        maintenanceRecord.add(maintenance);
-    }
-
     @Override
-    public String toString(){
+    public String toString() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Hibernate6Module()
                 .enable(Hibernate6Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS)
@@ -132,9 +136,8 @@ public class Car {
             throw new RuntimeException("Object not mappable");
         }
     }
+
 }
-
-
 /*
 class CarDAO {
     private Connection connection;

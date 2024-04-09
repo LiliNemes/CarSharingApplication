@@ -3,8 +3,10 @@ package org.example.carsharing_server.Location;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import jakarta.persistence.*;
+import org.example.carsharing_server.Booking.Booking;
 import org.example.carsharing_server.Car.Car;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*class LocationDAO {
@@ -29,23 +31,31 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int locationID;
 
-    private int GPS_width;
+    private double GPS_width;
 
-    private int GPS_height;
+    private double GPS_height;
     private String address;
 
     @OneToMany(mappedBy="location", cascade = CascadeType.ALL)
     private List<Car> cars_here;
 
+    @OneToMany(mappedBy="pickup_location", cascade = CascadeType.ALL)
+    private List<Booking> started_here;
+    @OneToMany(mappedBy="dropoff_location", cascade = CascadeType.ALL)
+    private List<Booking> ended_here;
+
     public Location(){
 
     }
 
-    public Location(String address, int GPS_height, int GPS_width)
+    public Location(String address, double GPS_height, double GPS_width)
     {
         this.address = address;
         this.GPS_height = GPS_height;
         this.GPS_width = GPS_width;
+        ended_here = new ArrayList<>();
+        started_here = new ArrayList<>();
+        cars_here = new ArrayList<>();
     }
 
     public int getLocationID() {
@@ -56,7 +66,7 @@ public class Location {
         this.locationID = locationID;
     }
 
-    public int getGPS_width() {
+    public double getGPS_width() {
         return GPS_width;
     }
 
@@ -64,7 +74,7 @@ public class Location {
         this.GPS_width = GPS_width;
     }
 
-    public int getGPS_height() {
+    public double getGPS_height() {
         return GPS_height;
     }
 
@@ -85,6 +95,22 @@ public class Location {
 
     public void setAddress(String address){
         this.address = address;
+    }
+
+    public List<Booking> getStarted_here() {
+        return started_here;
+    }
+
+    public void setStarted_here(List<Booking> started_here) {
+        this.started_here = started_here;
+    }
+
+    public List<Booking> getEnded_here() {
+        return ended_here;
+    }
+
+    public void setEnded_here(List<Booking> ended_here) {
+        this.ended_here = ended_here;
     }
 
     @Override

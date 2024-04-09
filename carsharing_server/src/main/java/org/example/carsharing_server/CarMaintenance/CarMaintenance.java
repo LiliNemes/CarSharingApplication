@@ -24,14 +24,14 @@ import java.sql.Date;
 public class CarMaintenance {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    int maintenanceID;
+    private int maintenanceID;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "carID", referencedColumnName = "licensePlate")
-    Car car;
-    Date maintenanceDate;
-    String typeOfMaintenance;
-    String details;
-    int cost;
+    @JoinColumn(name = "licensePlate", referencedColumnName = "licensePlate")
+    private Car car;
+    private Date maintenanceDate;
+    private String typeOfMaintenance;
+    private String details;
+    private int cost;
 
     public CarMaintenance(){
 
