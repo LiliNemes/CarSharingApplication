@@ -30,18 +30,18 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int bookingId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userID", referencedColumnName = "userID")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "licensePlate", referencedColumnName = "licensePlate")
     private Car car;
     private Date start_time;
     private Date end_time;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pickUpLocationID", referencedColumnName = "locationID")
     private Location pickup_location;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dropOffLocationID", referencedColumnName = "locationID")
     private Location dropoff_location;
     @OneToOne
@@ -50,11 +50,10 @@ public class Booking {
     private Payment payment;
     private int total_cost;
 
-    public Booking(Date start_time, Date end_time, int total_cost, Location dropoff_location, Location pickup_location, ReviewRating review, Payment payment, Car car, User user) {
+    public Booking(Date start_time, int total_cost, Location dropoff_location, Location pickup_location, ReviewRating review, Payment payment, Car car, User user) {
         this.user = user;
         this.car = car;
         this.start_time = start_time;
-        this.end_time = end_time;
         this.pickup_location = pickup_location;
         this.dropoff_location = dropoff_location;
         this.review = review;
