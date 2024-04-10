@@ -34,15 +34,15 @@ public class Booking {
     @JoinColumn(name = "userID", referencedColumnName = "userID")
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "licenseNumber", referencedColumnName = "licenseNumber")
+    @JoinColumn(name = "licensePlate", referencedColumnName = "licensePlate")
     private Car car;
     private Date start_time;
     private Date end_time;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "locationID", referencedColumnName = "locationID")
+    @JoinColumn(name = "pickUpLocationID", referencedColumnName = "locationID")
     private Location pickup_location;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "locationID", referencedColumnName = "locationID")
+    @JoinColumn(name = "dropOffLocationID", referencedColumnName = "locationID")
     private Location dropoff_location;
     @OneToOne
     private ReviewRating review;

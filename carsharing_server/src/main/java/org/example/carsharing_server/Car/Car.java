@@ -46,6 +46,10 @@ public class Car {
 
     }
 
+    public Car(String plate){
+        this.licensePlate = plate;
+    }
+
     public Car(String model, int releaseYear, String licensePlate, Location location, User owner) {
         this.model = model;
         this.releaseYear = releaseYear;
