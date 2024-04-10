@@ -29,7 +29,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public void addNewBooking(Booking booking) {
+    public void addNewBooking(@RequestBody Booking booking) {
         try {
             bookingService.addNewBooking(booking);
         } catch (Exception e) {
@@ -37,10 +37,10 @@ public class BookingController {
         }
     }
 
-    @DeleteMapping
-    public void deleteBooking(Booking booking){
-        try {
-            bookingService.deleteBooking(booking);
+    @PutMapping
+    public void deleteBooking(@RequestBody Booking booking){
+        try{
+            bookingService.updateBooking(booking);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -96,16 +96,5 @@ public class BookingController {
         }
         return ResponseEntity.ok(res);
     }
-    @GetMapping("/bookings/{userId}")
-    public ResponseEntity<String> carsOwnersBookings(@PathVariable String userId){
-        List<Booking> bookings = bookingService.carsOwnersBookings(userId);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String res;
-        try {
-            res = objectMapper.writeValueAsString(bookings);
-        } catch (JsonProcessingException e) {
-            res = bookings.toString();
-        }
-        return ResponseEntity.ok(res);
-    }
+
 }

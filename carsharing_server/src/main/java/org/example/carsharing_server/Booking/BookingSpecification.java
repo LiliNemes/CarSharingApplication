@@ -27,12 +27,5 @@ public class BookingSpecification {
         };
     }
 
-    static Specification<Booking> CarsOwnersBookings(int userId) {
-        return (root, query, builder) -> {
-            Join<Car, Booking> carsBooking =root.join("car");
-            Join<Car, User> carsOwner = root.join("car");
-            return builder.equal(carsOwner.get("userId"), userId);
-        };
-    }
 
 }

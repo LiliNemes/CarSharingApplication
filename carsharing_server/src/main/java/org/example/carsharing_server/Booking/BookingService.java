@@ -10,12 +10,11 @@ interface BookingService {
 
     void addNewBooking(Booking booking);
 
-    void deleteBooking(Booking booking);
+    void updateBooking(Booking booking);
     List<Booking> getPastBookingsOfUser(String userId);
     List<Booking> getPresentBookingsOfUser(String userId);
     List<Booking> getUsersBookings(String userID);
     List<Booking> getCarsBookings(String licensePlate);
-    List<Booking> carsOwnersBookings(String userId);
 
 
 

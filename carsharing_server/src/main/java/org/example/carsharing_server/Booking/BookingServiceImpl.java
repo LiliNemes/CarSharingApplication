@@ -27,8 +27,12 @@ public class BookingServiceImpl implements BookingService{
     }
 
     @Override
-    public void deleteBooking(Booking booking) {
-        bookingRepository.deleteById(booking.getBookingId());
+    public void updateBooking(Booking booking) {
+        Booking initialBooking = bookingRepository.findById(booking.getBookingId()).orElseThrow(() ->
+                new IllegalArgumentException("booking with id " + booking.getBookingId() + " does not exists"));
+        if (initialBooking.getEnd_time()==null && booking.getEnd_time()!=null){
+            initialBooking.setEnd_time(booking.getEnd_time());
+        }
     }
 
     @Override
@@ -54,11 +58,6 @@ public class BookingServiceImpl implements BookingService{
         return bookingRepository.findAll(carsBookings(licensePlate));
     }
 
-    @Override
-    public List<Booking> carsOwnersBookings(String userId) {
-        int userIdNum = Integer.parseInt(userId);
-        return bookingRepository.findAll(CarsOwnersBookings(userIdNum));
-    }
 
 
 }
