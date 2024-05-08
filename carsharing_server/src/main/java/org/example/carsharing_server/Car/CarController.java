@@ -46,7 +46,7 @@ public class CarController {
     }
 
     @DeleteMapping("/car/{licensePlate}")
-    public void deleteCars(@PathVariable String licensePlate) {
+    public void deleteCar(@PathVariable String licensePlate) {
         try {
             carService.deleteCar(licensePlate);
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class CarController {
 
     @GetMapping("cars/{locationId}")
     public ResponseEntity<String> getAvailableCars(@PathVariable String locationId) {
-        List<Car> cars = carService.getAvailableCars(locationId);
+        List<Car> cars = carService.getAvailableCars(Integer.parseInt(locationId));
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
         try {

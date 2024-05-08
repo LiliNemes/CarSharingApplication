@@ -5,7 +5,7 @@ public record UserType() {
     public static final String RENTER = "TYPE_RENTER";
 }*/
 
-enum UserType{
+public enum UserType{
     OWNER,
     RENTER
 }
