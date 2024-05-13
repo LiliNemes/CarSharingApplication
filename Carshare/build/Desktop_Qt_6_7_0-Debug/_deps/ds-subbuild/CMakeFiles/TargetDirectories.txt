@@ -1,0 +1,3 @@
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-subbuild/CMakeFiles/ds-populate.dir
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-subbuild/CMakeFiles/edit_cache.dir
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-subbuild/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,8 @@
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/imports/Carshare/.rcc/qmake_Carshare.qrc
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/imports/Carshare/.rcc/Carshare_raw_qml_0.qrc
+/qt/qml/Carshare/Constants.qml
+/qt/qml/Carshare/DirectoryFontLoader.qml
+/qt/qml/Carshare/EventListModel.qml
+/qt/qml/Carshare/EventListSimulator.qml

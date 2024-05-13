@@ -1,0 +1,16 @@
+--bare
+-I
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug
+-I
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/qml
+-I
+/home/sally-alala/Qt/6.7.0/gcc_64/./qml
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/.rcc/configuration.qrc
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/.rcc/qmake_Main.qrc
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/.rcc/CarshareApp_raw_qml_0.qrc
+/home/sally-alala/Desktop/client/Carshare/main.qml
+--json
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/CarshareApp_qmllint.json

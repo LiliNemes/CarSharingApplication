@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="/qt/qml/Carshare">/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/qml/Carshare</file>
+
+  </qresource>
+</RCC>
