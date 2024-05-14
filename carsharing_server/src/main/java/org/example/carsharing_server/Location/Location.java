@@ -70,7 +70,7 @@ public class Location {
         return GPS_width;
     }
 
-    public void setGPS_width(int GPS_width) {
+    public void setGPS_width(double GPS_width) {
         this.GPS_width = GPS_width;
     }
 
@@ -78,7 +78,7 @@ public class Location {
         return GPS_height;
     }
 
-    public void setGPS_height(int GPS_height) {
+    public void setGPS_height(double GPS_height) {
         this.GPS_height = GPS_height;
     }
 
