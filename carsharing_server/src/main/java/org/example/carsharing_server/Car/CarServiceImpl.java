@@ -31,7 +31,7 @@ public class CarServiceImpl implements CarService {
         existingCar.setReleaseYear(car.getReleaseYear());
         existingCar.setBookings(car.getBookings());
         existingCar.setLicensePlate(car.getLicensePlate());
-        existingCar.addMaintenance(car.getMaintenanceRecord().getLast());
+        //existingCar.addMaintenance(car.getMaintenanceRecord().getLast());
         carRepository.save(existingCar);
     }
 
