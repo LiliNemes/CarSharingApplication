@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/reviewratings")
 public class ReviewRatingController {
 
     private final ReviewRatingService reviewRatingService;
 
     public ReviewRatingController(ReviewRatingService reviewRatingService) {this.reviewRatingService = reviewRatingService;}
 
-    @GetMapping("/reviewratings")
+    @GetMapping
     public ResponseEntity<String> getReviewRatings() {
         List<ReviewRating> reviewRatings = reviewRatingService.getReviewRatings();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -36,7 +37,7 @@ public class ReviewRatingController {
         }
     }
 
-    @GetMapping("/reviewratings/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<String> getUsersReviewRatings(@PathVariable String userId) {
         List<ReviewRating> reviewRatings = reviewRatingService.getUsersReviewRating(userId);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -49,7 +50,7 @@ public class ReviewRatingController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/reviewratings/{bookingId}")
+    @GetMapping("/{bookingId}")
     public ResponseEntity<String> getBookingsReviewRatings(@PathVariable String bookingId) {
         List<ReviewRating> reviewRatings = reviewRatingService.getBookingsReviewRating(bookingId);
         ObjectMapper objectMapper = new ObjectMapper();

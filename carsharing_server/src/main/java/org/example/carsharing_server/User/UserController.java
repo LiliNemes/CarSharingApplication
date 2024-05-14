@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
     public UserController(UserService userService) {this.userService = userService;}
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<String> getUsers() {
         List<User> users = userService.getUsers();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -45,7 +46,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable int userId) {
         try {
             userService.deleteUser(userId);
@@ -54,7 +55,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/{licenseplate}")
+    @GetMapping("/{licenseplate}")
     public ResponseEntity<String> getCarOwner(@PathVariable String licenseplate) {
         List<User> users = userService.getCarOwner(licenseplate);
         ObjectMapper objectMapper = new ObjectMapper();

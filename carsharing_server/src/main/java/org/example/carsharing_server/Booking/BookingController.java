@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -15,7 +16,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping("/bookings")
+    @GetMapping
     public ResponseEntity<String> getBookings(){
         List<Booking> bookings = bookingService.getBookings();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -46,7 +47,7 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/bookings/{userId}/past")
+    @GetMapping("/{userId}/past")
     public ResponseEntity<String> getPastBookingOfUser(@PathVariable String userId){
         List<Booking> bookings = bookingService.getPastBookingsOfUser(userId);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -59,7 +60,7 @@ public class BookingController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/bookings/{userId}/present")
+    @GetMapping("/{userId}/present")
     public ResponseEntity<String> getPresentBookings(@PathVariable String userId){
         List<Booking> bookings = bookingService.getPresentBookingsOfUser(userId);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -72,7 +73,7 @@ public class BookingController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/bookings/{userID}")
+    @GetMapping("/{userID}")
     public ResponseEntity<String> getUsersBookings(@PathVariable String userID){
         List<Booking> bookings = bookingService.getUsersBookings(userID);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -84,7 +85,7 @@ public class BookingController {
         }
         return ResponseEntity.ok(res);
     }
-    @GetMapping("/bookings/{licensePlate}")
+    @GetMapping("/{licensePlate}")
     public ResponseEntity<String> getCarsBookings(@PathVariable String licensePlate){
         List<Booking> bookings = bookingService.getCarsBookings(licensePlate);
         ObjectMapper objectMapper = new ObjectMapper();

@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/carMaintenance")
 public class CarMaintenanceController {
 
     private final CarMaintenanceService carMaintenanceService;
 
     public CarMaintenanceController(CarMaintenanceService carMaintenanceService) {this.carMaintenanceService = carMaintenanceService;}
 
-    @GetMapping("/carMaintenances")
+    @GetMapping
     public ResponseEntity<String> getCarMaintenance() {
         List<CarMaintenance> carMaintenances = carMaintenanceService.getCarMaintenances();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -37,7 +38,7 @@ public class CarMaintenanceController {
     }
 
     @PutMapping
-    public void updateCar(@RequestBody CarMaintenance carMaintenance) {
+    public void updateCarMaintenance(@RequestBody CarMaintenance carMaintenance) {
         try{
             carMaintenanceService.updateCarMaintenance(carMaintenance);
         } catch (Exception e) {
@@ -45,8 +46,8 @@ public class CarMaintenanceController {
         }
     }
 
-    @DeleteMapping("/carMaintenaces/{carMaintenanceId}")
-    public void deleteCarMaintence(@PathVariable int carMaintenanceId) {
+    @DeleteMapping("/{carMaintenanceId}")
+    public void deleteCarMaintenance(@PathVariable int carMaintenanceId) {
         try{
             carMaintenanceService.deleteCarMaintenance(carMaintenanceId);
         } catch (Exception e) {
@@ -54,9 +55,9 @@ public class CarMaintenanceController {
         }
     }
 
-    @GetMapping("/carMaintenances/{licencsePlate}")
-    public ResponseEntity<String> getCarsCarMaintenance(@PathVariable String licencsePlate) {
-        List<CarMaintenance> carMaintenances = carMaintenanceService.getCarsCarMaintenance(licencsePlate);
+    @GetMapping("/{licensePlate}")
+    public ResponseEntity<String> getCarsCarMaintenance(@PathVariable String licensePlate) {
+        List<CarMaintenance> carMaintenances = carMaintenanceService.getCarsCarMaintenance(licensePlate);
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
         try {

@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
+@RequestMapping("/payments")
 public class PaymentController {
     private final PaymentService paymentService;
     public PaymentController(PaymentService paymentService) {this.paymentService = paymentService;}
 
-    @GetMapping("/payments")
+    @GetMapping
     public ResponseEntity<String> getPayment() {
         List<Payment> payments = paymentService.getPayments();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -34,7 +35,7 @@ public class PaymentController {
     }
 
 
-    @GetMapping("/payment/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<String> getUsersPayments(@PathVariable String userId) {
         List<Payment> payments = paymentService.getUsersPayments(userId);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -47,7 +48,7 @@ public class PaymentController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/payment/{bookingId}")
+    @GetMapping("/{bookingId}")
     public ResponseEntity<String> getPaymentofBooking(@PathVariable String bookingId) {
         List<Payment> payments = paymentService.getPaymentOfBooking(bookingId);
         ObjectMapper objectMapper = new ObjectMapper();
