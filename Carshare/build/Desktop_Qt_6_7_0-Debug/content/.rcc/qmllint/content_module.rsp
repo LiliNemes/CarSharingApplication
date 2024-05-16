@@ -1,0 +1,12 @@
+-I
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/qml
+-I
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/qml
+-I
+/home/sally-alala/Qt/6.7.0/gcc_64/./qml
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/content/.rcc/qmake_content.qrc
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/content/.rcc/content_raw_qml_0.qrc
+--module
+content

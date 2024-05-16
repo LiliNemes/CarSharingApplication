@@ -1,0 +1,14 @@
+--bare
+-I
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/qml
+-I
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/qml
+-I
+/home/sally-alala/Qt/6.7.0/gcc_64/./qml
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-build/src/imports/utils/.rcc/qmake_QtQuick_Studio_Utils.qrc
+--resource
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-build/src/imports/utils/.rcc/QuickStudioUtils_raw_qml_0.qrc
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-src/src/imports/utils/JsonListModel.qml
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-src/src/imports/utils/JsonBackend.qml
+/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-src/src/imports/utils/ChildListModel.qml

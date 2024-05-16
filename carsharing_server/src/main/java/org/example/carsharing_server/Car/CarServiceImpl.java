@@ -43,8 +43,8 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<Car> getAvailableCars(String locationId) {
-        int locationIdNum = Integer.parseInt(locationId);
+    public List<Car> getAvailableCars(int locationId) {
+        int locationIdNum = locationId;
         return carRepository.findAll(availableCars(locationIdNum));
     }
 

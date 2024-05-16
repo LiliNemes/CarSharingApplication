@@ -15,6 +15,6 @@ interface CarService {
 
     void deleteCar(String LicensePlate);
 
-    List<Car> getAvailableCars(String locationId);
+    List<Car> getAvailableCars(int locationId);
     List<Car> getOwnedCars(String userId);
 }

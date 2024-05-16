@@ -57,7 +57,7 @@ public class CarController {
 
     @GetMapping("/{locationId}")
     public ResponseEntity<String> getAvailableCars(@PathVariable String locationId) {
-        List<Car> cars = carService.getAvailableCars(locationId);
+        List<Car> cars = carService.getAvailableCars(Integer.parseInt(locationId));
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
         try {
