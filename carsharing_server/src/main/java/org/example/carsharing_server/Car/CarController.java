@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/cars")
 public class CarController {
 
     private final CarService carService;
 
     public CarController(CarService carService) {this.carService = carService;}
 
-    @GetMapping("/cars")
+    @GetMapping
     public ResponseEntity<String> getCars() {
         List<Car> cars = carService.getCars();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -45,7 +46,7 @@ public class CarController {
         }
     }
 
-    @DeleteMapping("/car/{licensePlate}")
+    @DeleteMapping("/{licensePlate}")
     public void deleteCars(@PathVariable String licensePlate) {
         try {
             carService.deleteCar(licensePlate);
@@ -54,7 +55,7 @@ public class CarController {
         }
     }
 
-    @GetMapping("cars/{locationId}")
+    @GetMapping("/{locationId}")
     public ResponseEntity<String> getAvailableCars(@PathVariable String locationId) {
         List<Car> cars = carService.getAvailableCars(locationId);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -67,7 +68,7 @@ public class CarController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/car/{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<String> getOwnedCars(@PathVariable String userId) {
         List<Car> cars = carService.getOwnedCars(userId);
         ObjectMapper objectMapper = new ObjectMapper();

@@ -34,7 +34,8 @@ public class User {
     private String email;
     private int phone_number;
     private String password;
-    private UserType type;
+
+    private String userRole;
     private int balance;
     @OneToMany(mappedBy="payer", cascade = CascadeType.ALL)
     private List<Payment> payments;
@@ -45,13 +46,13 @@ public class User {
     @OneToMany(mappedBy="owner", cascade = CascadeType.ALL)
     private List<Car> cars;
 
-    public User(String name, String email, int phone_number, String password, int balance, UserType type) {
+    public User(String name, String email, int phone_number, String password, int balance, String role) {
         this.name = name;
         this.email = email;
         this.phone_number = phone_number;
         this.password = password;
         this.balance = balance;
-        this.type = type;
+        this.userRole = role;
         this.payments = new ArrayList<>();
         this.reviews = new ArrayList<>();
         this.bookings = new ArrayList<>();
@@ -102,12 +103,12 @@ public class User {
         this.password = password;
     }
 
-    public UserType getType() {
-        return type;
+    public String getRole() {
+        return userRole;
     }
 
-    public void setType(UserType type) {
-        this.type = type;
+    public void setRole(String role) {
+        this.userRole = role;
     }
 
     public int getBalance() {
@@ -149,6 +150,7 @@ public class User {
     public void setCars(List<Car> cars) {
         this.cars = cars;
     }
+
 
     @Override
     public String toString(){

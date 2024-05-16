@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/locations")
 public class LocationController {
 
     private final LocationService locationService;
 
     public LocationController(LocationService locationService) {this.locationService = locationService;}
 
-    @GetMapping("/locations")
+    @GetMapping
     public ResponseEntity<String> getLocations() {
         List<Location> locations = locationService.getLocations();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -45,7 +46,7 @@ public class LocationController {
         }
     }
 
-    @DeleteMapping("/locations/{locationId}")
+    @DeleteMapping("/{locationId}")
     public void deleteLocation(@PathVariable int locationId) {
         try {
             locationService.deleteLocation(locationId);
@@ -54,7 +55,7 @@ public class LocationController {
         }
     }
 
-    @GetMapping("/locations/{licensePlate}")
+    @GetMapping("/{licensePlate}")
     public ResponseEntity<String> getCarsLocation(@PathVariable String licensePlate) {
         List<Location> locations = locationService.getCarsLocation(licensePlate);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -67,7 +68,7 @@ public class LocationController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/locations/{bookingId}/start")
+    @GetMapping("/{bookingId}/start")
     public ResponseEntity<String> getBookingStartingLocation(@PathVariable String bookingId) {
         List<Location> locations = locationService.getBookingStartingLocation(bookingId);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -80,7 +81,7 @@ public class LocationController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/locations/{bookingId}/end")
+    @GetMapping("/{bookingId}/end")
     public ResponseEntity<String> getBookingEndingLocation(@PathVariable String bookingId) {
         List<Location> locations = locationService.getBookingEndingLocation(bookingId);
         ObjectMapper objectMapper = new ObjectMapper();

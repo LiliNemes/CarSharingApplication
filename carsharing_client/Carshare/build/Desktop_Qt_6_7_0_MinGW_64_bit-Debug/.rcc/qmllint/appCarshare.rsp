@@ -1,0 +1,16 @@
+--bare
+-I
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug
+-I
+C:/Qt/6.7.0/mingw_64/./qml
+--resource
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/.rcc/qmake_Carshare.qrc
+--resource
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/.rcc/appCarshare_raw_qml_0.qrc
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/Main.qml
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/Login.qml
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/Registration.qml
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/AddNewCar.qml
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/RenterBookings.qml
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/LenderCars.qml
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/RenterMoney.qml
