@@ -1,0 +1,11 @@
+--resource
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/.rcc/qmake_Carshare.qrc
+--resource
+C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/.rcc/appCarshare_raw_qml_0.qrc
+/Carshare/Main.qml
+/Carshare/Login.qml
+/Carshare/Registration.qml
+/Carshare/AddNewCar.qml
+/Carshare/RenterBookings.qml
+/Carshare/LenderCars.qml
+/Carshare/RenterMoney.qml

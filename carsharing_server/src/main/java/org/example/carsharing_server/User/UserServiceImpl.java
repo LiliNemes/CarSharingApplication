@@ -1,14 +1,18 @@
 package org.example.carsharing_server.User;
 
+import org.example.carsharing_server.User.login.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.example.carsharing_server.User.UserSpecification.*;
+import static org.example.carsharing_server.User.UserSpecification.carsOwner;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -33,7 +37,7 @@ public class UserServiceImpl implements UserService{
         existingUser.setEmail(user.getEmail());
         existingUser.setPassword(user.getPassword());
         existingUser.setPayments(user.getPayments());
-        existingUser.setType(user.getType());
+        existingUser.setRole(user.getRole());
         existingUser.setReviews(user.getReviews());
         existingUser.setPhone_number(user.getPhone_number());
         userRepository.save(existingUser);
@@ -47,7 +51,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> getCarOwner(String licensPlate) {
-        return userRepository.findAll(carsOwner(licensPlate));
+    public List<User> getCarOwner(String licensePlate) {
+        return userRepository.findAll(carsOwner(licensePlate));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new CustomUserDetails(user);
     }
 }

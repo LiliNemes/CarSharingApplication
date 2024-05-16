@@ -1,0 +1,11 @@
+module Carshare
+typeinfo appCarshare.qmltypes
+prefer :/Carshare/
+Main 1.0 Main.qml
+Login 1.0 Login.qml
+Registration 1.0 Registration.qml
+AddNewCar 1.0 AddNewCar.qml
+RenterBookings 1.0 RenterBookings.qml
+LenderCars 1.0 LenderCars.qml
+RenterMoney 1.0 RenterMoney.qml
+

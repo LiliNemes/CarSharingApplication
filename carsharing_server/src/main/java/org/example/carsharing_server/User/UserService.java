@@ -15,4 +15,5 @@ interface UserService {
     void deleteUser(int userId);
 
     List<User> getCarOwner(String licensePlate);
+
 }
