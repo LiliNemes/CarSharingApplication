@@ -26,5 +26,5 @@ set(qml_import_scanner_import_23 "CLASSNAME;QtQuickControls2WindowsStyleImplPlug
 set(qml_import_scanner_import_24 "CLASSNAME;QmlShapesPlugin;LINKTARGET;Qt6::qmlshapesplugin;NAME;QtQuick.Shapes;PATH;C:/Qt/6.7.0/mingw_64/qml/QtQuick/Shapes;PLUGIN;qmlshapesplugin;PREFER;:/qt-project.org/imports/QtQuick/Shapes/;RELATIVEPATH;QtQuick/Shapes;TYPE;module;")
 set(qml_import_scanner_import_25 "CLASSNAME;QtQuickControls2BasicStyleImplPlugin;LINKTARGET;Qt6::qtquickcontrols2basicstyleimplplugin;NAME;QtQuick.Controls.Basic.impl;PATH;C:/Qt/6.7.0/mingw_64/qml/QtQuick/Controls/Basic/impl;PLUGIN;qtquickcontrols2basicstyleimplplugin;PLUGINISOPTIONAL;;PREFER;:/qt-project.org/imports/QtQuick/Controls/Basic/impl/;RELATIVEPATH;QtQuick/Controls/Basic/impl;TYPE;module;")
 set(qml_import_scanner_import_26 "CLASSNAME;QtQuickLayoutsPlugin;LINKTARGET;Qt6::qquicklayoutsplugin;NAME;QtQuick.Layouts;PATH;C:/Qt/6.7.0/mingw_64/qml/QtQuick/Layouts;PLUGIN;qquicklayoutsplugin;PLUGINISOPTIONAL;;PREFER;:/qt-project.org/imports/QtQuick/Layouts/;RELATIVEPATH;QtQuick/Layouts;TYPE;module;")
-set(qml_import_scanner_import_27 "NAME;networkcomms;TYPE;module;")
+set(qml_import_scanner_import_27 "NAME;networkaccess;TYPE;module;")
 

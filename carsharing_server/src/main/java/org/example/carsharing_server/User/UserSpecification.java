@@ -8,7 +8,7 @@ public class UserSpecification {
 
     static Specification<User> carsOwner(String licensePlate) {
         return (root, query, builder) -> {
-          Join<Car, User> carsOwner = root.join("car");
+          Join<Car, User> carsOwner = root.join("cars");
           return builder.equal(carsOwner.get("licensePlate"), licensePlate);
         };
     }

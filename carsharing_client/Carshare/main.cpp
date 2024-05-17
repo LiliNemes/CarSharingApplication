@@ -1,14 +1,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-#include "networkcomms.h"
+#include "networkaccess.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
-    qmlRegisterType<NetworkComms>("networkcomms", 1, 0, "NetworkComms");
+    qmlRegisterType<NetworkAccess>("networkaccess", 1, 0, "NetworkAccess");
+
 
     const QUrl url(QStringLiteral("qrc:/Carshare/Main.qml"));
     QObject::connect(

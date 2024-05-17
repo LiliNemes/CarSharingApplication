@@ -2,19 +2,35 @@
     {
         "classes": [
             {
-                "className": "NetworkComms",
-                "methods": [
+                "className": "NetworkAccess",
+                "object": true,
+                "qualifiedClassName": "NetworkAccess",
+                "signals": [
                     {
                         "access": "public",
                         "arguments": [
                             {
-                                "name": "firstName",
-                                "type": "QString"
+                                "name": "success",
+                                "type": "bool"
                             },
                             {
-                                "name": "lastName",
+                                "name": "errorMessage",
                                 "type": "QString"
-                            },
+                            }
+                        ],
+                        "name": "registrationResponse",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "public",
+                        "name": "registrationSuccesful",
+                        "returnType": "void"
+                    }
+                ],
+                "slots": [
+                    {
+                        "access": "public",
+                        "arguments": [
                             {
                                 "name": "email",
                                 "type": "QString"
@@ -22,6 +38,10 @@
                             {
                                 "name": "password",
                                 "type": "QString"
+                            },
+                            {
+                                "name": "type",
+                                "type": "bool"
                             }
                         ],
                         "name": "createAccount",
@@ -29,100 +49,29 @@
                     },
                     {
                         "access": "public",
-                        "arguments": [
-                            {
-                                "name": "email",
-                                "type": "QString"
-                            },
-                            {
-                                "name": "password",
-                                "type": "QString"
-                            }
-                        ],
-                        "name": "login",
+                        "name": "getAll",
                         "returnType": "void"
                     },
-                    {
-                        "access": "public",
-                        "name": "logout",
-                        "returnType": "void"
-                    },
-                    {
-                        "access": "public",
-                        "arguments": [
-                            {
-                                "name": "licencePlate",
-                                "type": "QString"
-                            },
-                            {
-                                "name": "carModel",
-                                "type": "QString"
-                            },
-                            {
-                                "name": "releaseYear",
-                                "type": "QString"
-                            }
-                        ],
-                        "name": "addNewCar",
-                        "returnType": "void"
-                    }
-                ],
-                "object": true,
-                "qualifiedClassName": "NetworkComms",
-                "signals": [
-                    {
-                        "access": "public",
-                        "name": "communicationStarted",
-                        "returnType": "void"
-                    },
-                    {
-                        "access": "public",
-                        "name": "communicationFinished",
-                        "returnType": "void"
-                    },
-                    {
-                        "access": "public",
-                        "arguments": [
-                            {
-                                "name": "strError",
-                                "type": "QString"
-                            }
-                        ],
-                        "name": "reportError",
-                        "returnType": "void"
-                    },
-                    {
-                        "access": "public",
-                        "name": "accountCreated",
-                        "returnType": "void"
-                    },
-                    {
-                        "access": "public",
-                        "arguments": [
-                            {
-                                "name": "role",
-                                "type": "QString"
-                            }
-                        ],
-                        "name": "successfulSignIn",
-                        "returnType": "void"
-                    },
-                    {
-                        "access": "public",
-                        "name": "successfulLogOut",
-                        "returnType": "void"
-                    }
-                ],
-                "slots": [
                     {
                         "access": "private",
                         "arguments": [
                             {
-                                "name": "pReply",
+                                "name": "reply",
                                 "type": "QNetworkReply*"
                             }
                         ],
-                        "name": "slotReplyFinished",
+                        "name": "registrationReplyFinished",
+                        "returnType": "void"
+                    },
+                    {
+                        "access": "private",
+                        "arguments": [
+                            {
+                                "name": "reply",
+                                "type": "QNetworkReply*"
+                            }
+                        ],
+                        "name": "getAllReplyFinished",
                         "returnType": "void"
                     }
                 ],
@@ -134,7 +83,7 @@
                 ]
             }
         ],
-        "inputFile": "networkcomms.h",
+        "inputFile": "networkaccess.h",
         "outputRevision": 68
     }
 ]

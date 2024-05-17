@@ -36,7 +36,7 @@ public class User {
     private String password;
 
     private String userRole;
-    private int balance;
+    private int balance =0;
     @OneToMany(mappedBy="payer", cascade = CascadeType.ALL)
     private List<Payment> payments;
     @OneToMany(mappedBy="author", cascade = CascadeType.ALL)
@@ -46,12 +46,9 @@ public class User {
     @OneToMany(mappedBy="owner", cascade = CascadeType.ALL)
     private List<Car> cars;
 
-    public User(String name, String email, int phone_number, String password, int balance, String role) {
-        this.name = name;
+    public User(String email, String password, String role) {
         this.email = email;
-        this.phone_number = phone_number;
         this.password = password;
-        this.balance = balance;
         this.userRole = role;
         this.payments = new ArrayList<>();
         this.reviews = new ArrayList<>();

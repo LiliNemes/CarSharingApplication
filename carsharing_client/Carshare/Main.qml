@@ -1,6 +1,6 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
-import networkcomms 1.0
+import networkaccess 1.0
 
 ApplicationWindow {
     minimumWidth: 640
@@ -135,13 +135,18 @@ ApplicationWindow {
         }
     }
 
-    NetworkComms {
+    NetworkAccess {
         id: communication
     }
 
     Connections {
         target: communication
+        function onRegistrationSuccesful() {
+                    // Change to login.qml upon successful registration
+            stack.showLoginView()
+        }
 
+        /*
         function onCommunicationStarted() {
             networkCommunicationProgress.visible = true;
         }
@@ -183,5 +188,6 @@ ApplicationWindow {
             renterMoney.visible = false;
             stack.showLoginView();
         }
+        */
     }
 }

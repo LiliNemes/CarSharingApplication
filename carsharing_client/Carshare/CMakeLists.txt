@@ -10,8 +10,8 @@ qt_standard_project_setup()
 
 qt_add_executable(appCarshare
     main.cpp
-    networkcomms.cpp
-    networkcomms.h
+    networkaccess.cpp
+    networkaccess.h
 )
 
 qt_add_qml_module(appCarshare

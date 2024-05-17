@@ -7,8 +7,8 @@ appCarshare_autogen/timestamp: \
   CMakeFiles/3.27.7/CMakeSystem.cmake \
   appCarshare_autogen/moc_predefs.h \
   C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/main.cpp \
-  C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkcomms.cpp \
-  C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkcomms.h \
+  C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkaccess.cpp \
+  C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkaccess.h \
   C:/Qt/6.7.0/mingw_64/include/QtCore/QFlags \
   C:/Qt/6.7.0/mingw_64/include/QtCore/QList \
   C:/Qt/6.7.0/mingw_64/include/QtCore/QMetaType \
@@ -134,12 +134,10 @@ appCarshare_autogen/timestamp: \
   C:/Qt/6.7.0/mingw_64/include/QtCore/qversiontagging.h \
   C:/Qt/6.7.0/mingw_64/include/QtCore/qxptype_traits.h \
   C:/Qt/6.7.0/mingw_64/include/QtCore/qyieldcpu.h \
-  C:/Qt/6.7.0/mingw_64/include/QtNetwork/QAuthenticator \
   C:/Qt/6.7.0/mingw_64/include/QtNetwork/QNetworkAccessManager \
   C:/Qt/6.7.0/mingw_64/include/QtNetwork/QSslConfiguration \
   C:/Qt/6.7.0/mingw_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
   C:/Qt/6.7.0/mingw_64/include/QtNetwork/qabstractsocket.h \
-  C:/Qt/6.7.0/mingw_64/include/QtNetwork/qauthenticator.h \
   C:/Qt/6.7.0/mingw_64/include/QtNetwork/qhostaddress.h \
   C:/Qt/6.7.0/mingw_64/include/QtNetwork/qnetworkaccessmanager.h \
   C:/Qt/6.7.0/mingw_64/include/QtNetwork/qnetworkrequest.h \

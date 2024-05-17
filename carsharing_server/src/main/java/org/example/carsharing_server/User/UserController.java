@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@RestController()
 @RequestMapping("/users")
 public class UserController {
 
@@ -88,7 +88,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequest registerRequest) {
-
+        System.out.println("Registering user");
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
         }

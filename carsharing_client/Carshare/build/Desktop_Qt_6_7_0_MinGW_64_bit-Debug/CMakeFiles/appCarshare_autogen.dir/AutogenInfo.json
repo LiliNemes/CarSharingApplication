@@ -699,9 +699,9 @@
 	"HEADERS" : 
 	[
 		[
-			"C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkcomms.h",
+			"C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkaccess.h",
 			"MU",
-			"EWIEGA46WW/moc_networkcomms.cpp",
+			"EWIEGA46WW/moc_networkaccess.cpp",
 			null
 		]
 	],
@@ -813,7 +813,7 @@
 			null
 		],
 		[
-			"C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkcomms.cpp",
+			"C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/networkaccess.cpp",
 			"MU",
 			null
 		]

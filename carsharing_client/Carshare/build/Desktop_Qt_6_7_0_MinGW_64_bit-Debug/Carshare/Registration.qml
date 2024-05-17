@@ -40,62 +40,6 @@ Page {
             spacing: 10
 
             Label {
-                text: "First Name"
-                Layout.preferredWidth: 103
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            Rectangle {
-                id: rectFirstNameReg
-                width: 220
-                height: 28
-                border.color: "black"
-                color: "white"
-
-                TextInput {
-                    id: inputFirstNameReg
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    horizontalAlignment: Text.AlignLeft
-                    cursorVisible: true
-                    activeFocusOnPress: true
-                    clip: true
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: 10
-
-            Label {
-                text: "Last Name"
-                Layout.preferredWidth: 103
-                Layout.alignment: Qt.AlignVCenter
-            }
-
-            Rectangle {
-                id: rectLastNameReg
-                width: 220
-                height: 28
-                border.color: "black"
-                color: "white"
-
-                TextInput {
-                    id: inputLastNameReg
-                    anchors.fill: parent
-                    anchors.margins: 2
-                    horizontalAlignment: Text.AlignLeft
-                    cursorVisible: true
-                    activeFocusOnPress: true
-                    clip: true
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: 10
-
-            Label {
                 text: "E-Mail address"
                 Layout.preferredWidth: 103
                 Layout.alignment: Qt.AlignVCenter
@@ -189,21 +133,20 @@ Page {
                 }
             }
         }
+        RowLayout {
+            spacing: 10
+            Label {
+                id: sellerText
+                text: "Seller mode?"
+                //Layout.preferredWidth: 103
+                //Layout.preferredHeight: 103
+                Layout.alignment: Qt.AlignVCenter
+            }
+            Switch {
+                id: sellerSwitch
+                text: qsTr("Seller mode")
+            }
 
-        Text {
-            id: textFirstNameErrReg
-            visible: false
-            width: 300
-            color: "#ff0000"
-            text: "First name can contain only uppercase and lowercase alphabetic characters. No whitespaces are allowed."
-        }
-
-        Text {
-            id: textLastNameErrReg
-            visible: false
-            width: 300
-            color: "#ff0000"
-            text: "Last name can contain only uppercase and lowercase alphabetic characters. No whitespaces are allowed."
         }
 
         Text {
@@ -231,16 +174,15 @@ Page {
             text: "The given passwords don't match"
         }
 
+
+
         Button {
             id: buttonCreateAccount
             width: 127
             height: 25
             text: "Create account"
+            Layout.alignment: Qt.AlignCenter
             onClicked: {
-                textFirstNameErrReg.visible = false;
-                rectFirstNameReg.border.color = "black";
-                textLastNameErrReg.visible = false;
-                rectLastNameReg.border.color = "black";
                 textEmailErrReg.visible = false;
                 rectEmailReg.border.color = "black";
                 textPwdErrReg.visible = false;
@@ -248,6 +190,7 @@ Page {
                 textPwdRepeatErrReg.visible = false;
                 rectPwdRepeatReg.border.color = "black";
 
+                /*
                 if (!userinputvalidator.validateName(inputFirstNameReg.text)) {
                     textFirstNameErrReg.visible = true;
                     rectFirstNameReg.border.color = "red";
@@ -272,9 +215,10 @@ Page {
                         rectPwdRepeatReg.border.color = "red";
                     }
                 }
+                */
 
-                if (!textFirstNameErrReg.visible && !textLastNameErrReg.visible && !textEmailErrReg.visible && !textPwdErrReg.visible && !textPwdRepeatErrReg.visible) {
-                    httpcommunication.createAccount(inputFirstNameReg.text, inputLastNameReg.text, inputEmailReg.text, inputPwdReg.text);
+                if (!textEmailErrReg.visible && !textPwdErrReg.visible && !textPwdRepeatErrReg.visible) {
+                    communication.createAccount(inputEmailReg.text, inputPwdReg.text, sellerSwitch.checked);
                 }
             }
         }
