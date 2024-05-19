@@ -1,8 +1,10 @@
 package org.example.carsharing_server.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.example.carsharing_server.Booking.Booking;
 import org.example.carsharing_server.Car.Car;
 import org.example.carsharing_server.Payment.Payment;
@@ -10,48 +12,47 @@ import org.example.carsharing_server.ReviewRating.ReviewRating;
 
 import java.util.ArrayList;
 import java.util.List;
-/*;
-class UserDAO {
-    private Connection connection;
-    public UserDAO() {
-        try {
-            connection = DriverManager.getConnection("","username","password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-*/
 
 @Entity
 @Table
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Min(1)
     private int userID;
-    private String name;
+
+    @Email
     private String email;
-    private int phone_number;
+
+    @JsonIgnore
+    @NotBlank
+    @Size(min = 8)
     private String password;
 
+    @Pattern(regexp = "^(OWNER|RENTER)$")
     private String userRole;
-    private int balance;
+
+    private int balance =0;
+
     @OneToMany(mappedBy="payer", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Payment> payments;
+
     @OneToMany(mappedBy="author", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ReviewRating> reviews;
+
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Booking> bookings;
+
     @OneToMany(mappedBy="owner", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Car> cars;
 
-    public User(String name, String email, int phone_number, String password, int balance, String role) {
-        this.name = name;
+    public User(String email, String password, String role) {
         this.email = email;
-        this.phone_number = phone_number;
         this.password = password;
-        this.balance = balance;
         this.userRole = role;
         this.payments = new ArrayList<>();
         this.reviews = new ArrayList<>();
@@ -59,8 +60,10 @@ public class User {
         this.cars = new ArrayList<>();
     }
 
-    public User() {
+    public User() {}
 
+    public User(int userID){
+        this.userID = userID;
     }
 
     public int getUser_id() {
@@ -71,28 +74,12 @@ public class User {
         this.userID = user_id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(int phone_number) {
-        this.phone_number = phone_number;
     }
 
     public String getPassword() {

@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/Carshare">
-    <file alias="qmldir">C:/BME/alfhf2024tcs-marnemszamit/carsharing_client/Carshare/build/Desktop_Qt_6_7_0_MinGW_64_bit-Debug/Carshare/qmldir</file>
-  </qresource>
-</RCC>
-

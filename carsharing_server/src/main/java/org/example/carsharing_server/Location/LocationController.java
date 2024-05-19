@@ -2,6 +2,11 @@ package org.example.carsharing_server.Location;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +18,7 @@ public class LocationController {
 
     private final LocationService locationService;
 
+    @Autowired
     public LocationController(LocationService locationService) {this.locationService = locationService;}
 
     @GetMapping
@@ -29,7 +35,7 @@ public class LocationController {
     }
 
     @PostMapping
-    public void addNewLocation(@RequestBody Location location) {
+    public void addNewLocation(@Valid @RequestBody Location location) {
         try {
             locationService.addNewLocation(location);
         } catch (Exception e) {
@@ -38,7 +44,7 @@ public class LocationController {
     }
 
     @PutMapping
-    public void updateLocation(@RequestBody Location location) {
+    public void updateLocation(@Valid @RequestBody Location location) {
         try {
             locationService.updateLocation(location);
         } catch (Exception e) {
@@ -47,7 +53,7 @@ public class LocationController {
     }
 
     @DeleteMapping("/{locationId}")
-    public void deleteLocation(@PathVariable int locationId) {
+    public void deleteLocation(@Valid @PathVariable @Min(0) Integer locationId) {
         try {
             locationService.deleteLocation(locationId);
         } catch (Exception e) {
@@ -56,7 +62,7 @@ public class LocationController {
     }
 
     @GetMapping("/{licensePlate}")
-    public ResponseEntity<String> getCarsLocation(@PathVariable String licensePlate) {
+    public ResponseEntity<String> getCarsLocation(@Valid @PathVariable @NotBlank @Size(min = 6, max = 6) String licensePlate) {
         List<Location> locations = locationService.getCarsLocation(licensePlate);
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
@@ -69,7 +75,7 @@ public class LocationController {
     }
 
     @GetMapping("/{bookingId}/start")
-    public ResponseEntity<String> getBookingStartingLocation(@PathVariable String bookingId) {
+    public ResponseEntity<String> getBookingStartingLocation(@Valid @PathVariable @Min(0) Integer bookingId) {
         List<Location> locations = locationService.getBookingStartingLocation(bookingId);
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
@@ -82,7 +88,7 @@ public class LocationController {
     }
 
     @GetMapping("/{bookingId}/end")
-    public ResponseEntity<String> getBookingEndingLocation(@PathVariable String bookingId) {
+    public ResponseEntity<String> getBookingEndingLocation(@Valid @PathVariable @Min(0) Integer bookingId) {
         List<Location> locations = locationService.getBookingEndingLocation(bookingId);
         ObjectMapper objectMapper = new ObjectMapper();
         String res;

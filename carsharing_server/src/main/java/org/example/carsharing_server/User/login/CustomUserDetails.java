@@ -2,10 +2,11 @@ package org.example.carsharing_server.User.login;
 
 import org.example.carsharing_server.User.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
     private  final User user;
@@ -16,7 +17,9 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(() -> "ROLE_" + user.getRole());
+        ArrayList<String> roles = new ArrayList<>();
+        roles.add("ROLE_" + user.getRole());
+        return  roles.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.example.carsharing_server.User;
 
+import jakarta.transaction.Transactional;
 import org.example.carsharing_server.User.login.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.example.carsharing_server.User.UserSpecification.carsOwner;
 
@@ -23,36 +25,42 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<User> getUsers() {return userRepository.findAll();}
 
     @Override
-    public void addNewUser(User user) {userRepository.save(user);}
-
-    @Override
-    public void updateUser(User user) {
+    @Transactional
+    public void updateUser(User user, UserDetails userDetails) {
         User existingUser = userRepository.findById(user.getUser_id()).orElseThrow(() ->
                 new IllegalArgumentException("User Id " + user.getUser_id() + "does not exist"));
-        existingUser.setUser_id(user.getUser_id());
+
+        if (!existingUser.getEmail().equals(userDetails.getUsername())) {
+            throw new IllegalArgumentException("User is trying to update other's account!");
+        }
+
         existingUser.setBalance(user.getBalance());
-        existingUser.setBookings(user.getBookings());
-        existingUser.setCars(user.getCars());
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setPayments(user.getPayments());
-        existingUser.setRole(user.getRole());
-        existingUser.setReviews(user.getReviews());
-        existingUser.setPhone_number(user.getPhone_number());
-        userRepository.save(existingUser);
+
+        if (user.getPassword() != null && !user.getPassword().isBlank())
+            existingUser.setPassword(user.getPassword());
     }
 
     @Override
-    public void deleteUser(int userId) {
+    public void deleteUser(int userId, UserDetails userDetails) {
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new IllegalArgumentException("User id " + userId + " does not exist"));
+
+        if (!user.getEmail().equals(userDetails.getUsername())) {
+            throw new IllegalArgumentException("User is trying to delete other's account!");
+        }
+
         userRepository.delete(user);
     }
 
     @Override
-    public List<User> getCarOwner(String licensePlate) {
-        return userRepository.findAll(carsOwner(licensePlate));
+    public Optional<User> getCarOwner(String licensePlate) {
+        return userRepository.findOne(carsOwner(licensePlate));
+    }
+
+    @Override
+    public User getUser(int userId) {
+        return userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("User id " + userId + " does not exist"));
     }
 
     @Override

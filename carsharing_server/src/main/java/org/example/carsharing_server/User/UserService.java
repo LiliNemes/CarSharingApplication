@@ -1,19 +1,22 @@
 package org.example.carsharing_server.User;
 
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-interface UserService {
+public interface UserService {
     List<User> getUsers();
 
-    void addNewUser(User user);
+    @Transactional
+    void updateUser(User user, UserDetails userDetails);
 
-    void updateUser(User user);
+    void deleteUser(int userId, UserDetails userDetails);
 
-    void deleteUser(int userId);
+    Optional<User> getCarOwner(String licensePlate);
 
-    List<User> getCarOwner(String licensePlate);
-
+    User getUser(int userId);
 }

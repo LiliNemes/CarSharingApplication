@@ -1,7 +1,10 @@
 package org.example.carsharing_server.Booking;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.*;
 import org.example.carsharing_server.Car.Car;
 import org.example.carsharing_server.Location.Location;
@@ -9,48 +12,52 @@ import org.example.carsharing_server.Payment.Payment;
 import org.example.carsharing_server.ReviewRating.ReviewRating;
 import org.example.carsharing_server.User.User;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
-/*
-class BookingDAO {
-    private Connection connection;
 
-    public BookingDAO() {
-        try {
-            connection = DriverManager.getConnection("", "username", "password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-}
-*/
 @Entity
 @Table
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int bookingId;
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userID", referencedColumnName = "userID")
     private User user;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "licensePlate", referencedColumnName = "licensePlate")
     private Car car;
-    private Date start_time;
-    private Date end_time;
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    private LocalDateTime start_time;
+
+    private LocalDateTime end_time;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pickUpLocationID", referencedColumnName = "locationID")
     private Location pickup_location;
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dropOffLocationID", referencedColumnName = "locationID")
     private Location dropoff_location;
+
     @OneToOne
+    @JsonManagedReference
     private ReviewRating review;
+
     @OneToOne
     private Payment payment;
-    private int total_cost;
 
-    public Booking(Date start_time, int total_cost, Location dropoff_location, Location pickup_location, ReviewRating review, Payment payment, Car car, User user) {
+    private double total_cost;
+
+    public Booking(Car car, User user) {
+        this.user = user;
+        this.car = car;
+    }
+
+    public Booking(LocalDateTime start_time, int total_cost, Location dropoff_location, Location pickup_location, ReviewRating review, Payment payment, Car car, User user) {
         this.user = user;
         this.car = car;
         this.start_time = start_time;
@@ -65,6 +72,12 @@ public class Booking {
 
     }
 
+    public void configure(){
+        this.start_time = LocalDateTime.now();
+        this.pickup_location = this.car.getLocation();
+        this.payment = new Payment(this.car.getPrice(),start_time, this.user);
+        this.total_cost = this.car.getPrice();
+    }
     public int getBookingId() {
         return bookingId;
     }
@@ -89,19 +102,19 @@ public class Booking {
         this.car = carId;
     }
 
-    public Date getStart_time() {
+    public LocalDateTime getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(Date start_time) {
+    public void setStart_time(LocalDateTime start_time) {
         this.start_time = start_time;
     }
 
-    public Date getEnd_time() {
+    public LocalDateTime getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(Date end_time) {
+    public void setEnd_time(LocalDateTime end_time) {
         this.end_time = end_time;
     }
 
@@ -121,11 +134,11 @@ public class Booking {
         this.dropoff_location = dropoff_location;
     }
 
-    public int getTotal_cost() {
+    public double getTotal_cost() {
         return total_cost;
     }
 
-    public void setTotal_cost(int total_cost) {
+    public void setTotal_cost(double total_cost) {
         this.total_cost = total_cost;
     }
 
@@ -148,6 +161,8 @@ public class Booking {
     @Override
     public String toString(){
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.registerModule(new Hibernate6Module()
                 .enable(Hibernate6Module.Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS)
                 .enable(Hibernate6Module.Feature.WRITE_MISSING_ENTITIES_AS_NULL));

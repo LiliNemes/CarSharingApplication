@@ -1,8 +1,10 @@
 package org.example.carsharing_server.Location;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.util.List;
 
 import static org.example.carsharing_server.Location.LocationSpecification.*;
@@ -18,9 +20,12 @@ public class LocationServiceImpl implements LocationService{
     public List<Location> getLocations() {return locationRepository.findAll();}
 
     @Override
-    public void addNewLocation(Location location) {locationRepository.save(location);}
+    public void addNewLocation(Location location) {
+        locationRepository.save(location);
+    }
 
     @Override
+    @Transactional
     public void updateLocation(Location location) {
         Location currentLocation = locationRepository.findById(location.getLocationID()).orElseThrow(() ->
                 new IllegalArgumentException("Location Id " + location.getLocationID() + "does not exist"));
@@ -47,13 +52,18 @@ public class LocationServiceImpl implements LocationService{
     }
 
     @Override
-    public List<Location> getBookingStartingLocation(String bookingId) {
-        int bookingIdNum = Integer.parseInt(bookingId);
-        return locationRepository.findAll(bookingStartingLocation(bookingIdNum));
+    public List<Location> getBookingStartingLocation(int bookingId) {
+        return locationRepository.findAll(bookingStartingLocation(bookingId));
     }
 
-    public List<Location> getBookingEndingLocation(String bookingId) {
-        int bookingIdNum = Integer.parseInt(bookingId);
-        return locationRepository.findAll(bookingEndingLocation(bookingIdNum));
+    @Override
+    public List<Location> getBookingEndingLocation(int bookingId) {
+        return locationRepository.findAll(bookingEndingLocation(bookingId));
+    }
+
+    @Override
+    public Location getLocation(int locationID) {
+        return locationRepository.findById(locationID).orElseThrow(() ->
+                new IllegalArgumentException("Location Id " + locationID + "does not exist"));
     }
 }
