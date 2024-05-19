@@ -124,12 +124,8 @@ Page {
             text: "Create account"
             Layout.alignment: Qt.AlignCenter
             onClicked: {
-                textEmailErrReg.visible = false;
                 rectEmailReg.border.color = "black";
-                textPwdErrReg.visible = false;
                 rectPwdReg.border.color = "black";
-                textPwdRepeatErrReg.visible = false;
-                rectPwdRepeatReg.border.color = "black";
 
                 communication.createAccount(inputEmailReg.text, inputPwdReg.text, sellerSwitch.checked);
             }
