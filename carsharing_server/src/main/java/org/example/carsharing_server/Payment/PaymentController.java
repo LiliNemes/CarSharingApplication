@@ -2,7 +2,11 @@ package org.example.carsharing_server.Payment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,9 +30,9 @@ public class PaymentController {
     }
 
     @PostMapping
-    public void addNewPayment(@RequestBody Payment payment) {
+    public void addNewPayment(@Valid @RequestBody Payment payment, @AuthenticationPrincipal UserDetails userDetails) {
         try {
-            paymentService.addNewPayment(payment);
+            paymentService.addNewPayment(payment, userDetails);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -36,8 +40,8 @@ public class PaymentController {
 
 
     @GetMapping("/{userId}")
-    public ResponseEntity<String> getUsersPayments(@PathVariable String userId) {
-        List<Payment> payments = paymentService.getUsersPayments(userId);
+    public ResponseEntity<String> getUsersPayments(@Valid @PathVariable @Min(1) Integer userId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<Payment> payments = paymentService.getUsersPayments(userId, userDetails);
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
         try {
@@ -49,7 +53,7 @@ public class PaymentController {
     }
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<String> getPaymentofBooking(@PathVariable String bookingId) {
+    public ResponseEntity<String> getPaymentofBooking(@Valid @PathVariable @Min(0) Integer bookingId) {
         List<Payment> payments = paymentService.getPaymentOfBooking(bookingId);
         ObjectMapper objectMapper = new ObjectMapper();
         String res;

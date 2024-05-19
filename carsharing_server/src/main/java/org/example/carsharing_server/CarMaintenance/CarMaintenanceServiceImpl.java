@@ -1,5 +1,6 @@
 package org.example.carsharing_server.CarMaintenance;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +22,20 @@ public class CarMaintenanceServiceImpl implements CarMaintenanceService{
     public void addNewCarMaintenance(CarMaintenance carMaintenance) {carMaintenanceRepository.save(carMaintenance);}
 
     @Override
+    @Transactional
     public void updateCarMaintenance(CarMaintenance carMaintenance) {
         CarMaintenance currentCM = carMaintenanceRepository.findById(carMaintenance.getMaintenanceID()).orElseThrow(() ->
                 new IllegalArgumentException("CarMaintenance Id " + carMaintenance.getMaintenanceID() + " does not exists"));
-        currentCM.setCar(carMaintenance.getCar());
-        currentCM.setMaintenanceID(carMaintenance.getMaintenanceID());
-        currentCM.setCost(carMaintenance.getCost());
-        currentCM.setTypeOfMaintenance(carMaintenance.getTypeOfMaintenance());
+        if (carMaintenance.getCar() != null)
+            currentCM.setCar(carMaintenance.getCar());
+
+        if (carMaintenance.getCost() != 0)
+            currentCM.setCost(carMaintenance.getCost());
+
+        if (carMaintenance.getTypeOfMaintenance() != null && !carMaintenance.getTypeOfMaintenance().isBlank())
+            currentCM.setTypeOfMaintenance(carMaintenance.getTypeOfMaintenance());
+
+        if (carMaintenance.getDetails() != null && !carMaintenance.getDetails().isBlank())
         currentCM.setDetails(carMaintenance.getDetails());
         currentCM.setMaintenanceDate(carMaintenance.getMaintenanceDate());
         carMaintenanceRepository.save(currentCM);

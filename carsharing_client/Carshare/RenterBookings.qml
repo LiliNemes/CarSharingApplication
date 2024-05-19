@@ -1,166 +1,136 @@
-// Copyright (C) 2021 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
-
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 
 Page {
-    width: Constants.width
-    height: Constants.height
+    id: renterBookingsView
 
     visible: true
-    title: "Car bookings"
+    title: "Bookings"
 
-    Rectangle {
-        id: rectangle
-        width: Constants.width
-        height: Constants.height
-        anchors.fill: parent
+    ListView {
+        id: renterBookingsList
+        width: parent.width
+        height: parent.height
 
-        color: Constants.backgroundColor
+        delegate: Item {
+            width: parent.width
+            height: 150
 
-        Text {
-            id: text1
-            x: 215
-            y: 21
-            width: 219
-            height: 53
-            text: qsTr("View Bookings!")
-            font.pixelSize: 30
-            verticalAlignment: Text.AlignVCenter
-        }
+            Rectangle {
+                width: parent.width
+                height: parent.height
+                color: "transparent"
 
-        Rectangle {
-            id: rectangle1
-            x: 278
-            y: 104
-            width: 265
-            height: 28
-            color: "#ffffff"
-            radius: 12
-        }
+                Column {
+                    anchors.fill: parent
+                    anchors.margins: 10
+                    spacing: 5
 
-        Label {
-            id: label
-            x: 135
-            y: 107
-            width: 111
-            height: 22
-            text: qsTr("Booking cost:")
-        }
+                    Row {
+                        spacing: 10
+                        Text { text: qsTr("Booking ID:") }
+                        Text { text: bookingId }
+                    }
 
-        Label {
-            id: label1
-            x: 135
-            y: 147
-            width: 111
-            height: 21
-            text: qsTr("Booking date")
-        }
+                    Row {
+                        spacing: 10
+                        Text { text: qsTr("License plate:") }
+                        Text { text: licensePlate }
+                    }
 
-        Rectangle {
-            id: rectangle4
-            x: 278
-            y: 143
-            width: 265
-            height: 28
-            color: "#ffffff"
-            radius: 12
-        }
+                    Row {
+                        spacing: 10
+                        Text { text: qsTr("Price per day:") }
+                        Text { text: pricePerDay }
+                    }
 
-        Button {
-            id: button
-            x: 17
-            y: 21
-            text: qsTr("Back")
-            onClicked: close()
-        }
+                    Row {
+                        spacing: 10
+                        Text { text: qsTr("Start time:") }
+                        Text { text: startTime }
+                    }
 
-        Item {
-            id: __materialLibrary__
-        }
+                    Row {
+                        spacing: 10
+                        Text { text: qsTr("End time:") }
+                        Text { text: endTime }
+                    }
+                }
 
-        Rectangle {
-            id: rectangle2
-            x: 278
-            y: 209
-            width: 265
-            height: 28
-            color: "#ffffff"
-            radius: 12
-        }
+                Button {
+                    id: buttonEndBooking
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    width: 170
+                    height: 25
+                    text: "End Booking"
+                    visible: visibleStop
+                    onClicked: {
+                        communication.endBooking(bookingId)
+                    }
+                }
 
-        Label {
-            id: label2
-            x: 135
-            y: 212
-            width: 111
-            height: 22
-            text: qsTr("Booking cost:")
-        }
+                Button {
+                    id: buttonReviewBooking
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    width: 170
+                    height: 25
+                    text: "Review"
+                    visible: visibleReview
+                    onClicked: {
+                        communication.clickedOnReview(bookingId);
 
-        Label {
-            id: label3
-            x: 135
-            y: 252
-            width: 111
-            height: 21
-            text: qsTr("Booking date")
-        }
-
-        Rectangle {
-            id: rectangle5
-            x: 278
-            y: 248
-            width: 265
-            height: 28
-            color: "#ffffff"
-            radius: 12
-        }
-
-        Rectangle {
-            id: rectangle3
-            x: 278
-            y: 317
-            width: 265
-            height: 28
-            color: "#ffffff"
-            radius: 12
-        }
-
-        Label {
-            id: label4
-            x: 135
-            y: 320
-            width: 111
-            height: 22
-            text: qsTr("Booking cost:")
-        }
-
-        Label {
-            id: label5
-            x: 135
-            y: 360
-            width: 111
-            height: 21
-            text: qsTr("Payment date")
-        }
-
-        Rectangle {
-            id: rectangle6
-            x: 278
-            y: 356
-            width: 265
-            height: 28
-            color: "#ffffff"
-            radius: 12
-        }
-
-        states: [
-            State {
-                name: "clicked"
+                        stack.showAddReview()
+                    }
+                }
             }
-        ]
+        }
+
+        model: ListModel {
+            id: bookingsListViewModel
+        }
+
+        Component.onCompleted: {
+            refresh();
+        }
+
+        function refresh() {
+            bookingsListViewModel.clear();
+            communication.fetchBookings();
+        }
+
+        Connections {
+            target: communication
+
+            function onBookingsFetchedEnded(bookingId, licensePlate, start_time, end_time, price_per_day, isReviewed) {
+                bookingsListViewModel.append({
+                    "bookingId": bookingId,
+                    "licensePlate": licensePlate,
+                    "startTime": start_time,
+                    "endTime": end_time,
+                    "pricePerDay": price_per_day,
+                    "visibleStop": false,
+                    "visibleReview": isReviewed
+                });
+            }
+
+            function onBookingsFetchedGoing(bookingId, licensePlate, start_time, price_per_day) {
+                bookingsListViewModel.append({
+                    "bookingId": bookingId,
+                    "licensePlate": licensePlate,
+                    "startTime": start_time,
+                    "endTime": "-",
+                    "pricePerDay": price_per_day,
+                    "visibleStop": true,
+                    "visibleReview": false
+                });
+            }
+
+            function onEndBookingFinished(){
+                bookingsListViewModel.clear();
+                communication.fetchBookings();
+            }
+        }
     }
 }
-

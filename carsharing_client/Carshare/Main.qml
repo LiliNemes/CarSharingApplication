@@ -5,8 +5,8 @@ import networkaccess 1.0
 ApplicationWindow {
     minimumWidth: 640
     maximumWidth: 640
-    minimumHeight: 480
-    maximumHeight: 480
+    minimumHeight: 600
+    maximumHeight: 600
     visible: true
     title: "Car Share, it doesn't count anymore!"
     id: mainwindow
@@ -63,24 +63,9 @@ ApplicationWindow {
             MenuItem {
                 text: "Log out"
                 onTriggered: {
-                    communication.logOut();
+                    communication.logout();
                 }
             }
-        }
-    }
-
-    Rectangle {
-        id: networkCommunicationProgress
-        width: mainwindow.width
-        height: mainwindow.height
-        color: "white"
-        visible: false
-        z: 11
-        AnimatedImage {
-            source: "load.gif"
-            height: 100
-            width: 100
-            anchors.centerIn: parent
         }
     }
 
@@ -115,23 +100,21 @@ ApplicationWindow {
             stack.replace("RenterBookings.qml");
         }
 
-        function showLenderCarsView() {
-            stack.replace("LenderCars.qml");
+        function showOwnerCarsView() {
+            stack.replace("OwnerCars.qml");
         }
 
         function showLenderMoneyView() {
             stack.replace("LenderMoney.qml");
         }
-    }
-
-    Dialog {
-        id: dialogNetworkError
-        anchors.centerIn: parent
-        modal: true
-        padding: 20
-        contentItem: Label {
-            id: dialogNetworkErrorLabel
-            color: "red"
+        function showBookingView() {
+            stack.replace("Booking.qml");
+        }
+        function showAddReview(){
+            stack.replace("AddReview.qml");
+        }
+        function showReviewStatistics(){
+            stack.replace("ReviewStatistics.qml");
         }
     }
 
@@ -142,44 +125,25 @@ ApplicationWindow {
     Connections {
         target: communication
         function onRegistrationSuccesful() {
-                    // Change to login.qml upon successful registration
-            stack.showLoginView()
+            stack.showLoginView()   // Change to login.qml upon successful registration
         }
 
-        /*
-        function onCommunicationStarted() {
-            networkCommunicationProgress.visible = true;
+
+        function onLoginSuccesfulOwner(){
+            stack.showOwnerCarsView()
+            menuBar.visible = true
+            renterBookings.visible = false
+            renterCars.visible = false
         }
 
-        function onCommunicationFinished() {
-            networkCommunicationProgress.visible = false;
+        function onLoginSuccesfulRenter(){
+            stack.showRenterCarsView()
+            menuBar.visible = true
+            renterBookings.visible = true
+            renterCars.visible = true
         }
 
-        function onReportError(strError) {
-            dialogNetworkErrorLabel.text = strError;
-            dialogNetworkError.open();
-        }
-
-        function onAccountCreated() {
-            stack.showLoginView();
-        }
-
-        function onSuccessfulSignIn(role) {
-            if (role === "lender") {
-                lenderCars.visible = true;
-                lenderMoney.visible = true;
-                menuBar.visible = true;
-                stack.showLenderMoneyView();
-            } else if (role === "renter") {
-                renterBookings.visible = true;
-                renterCars.visible = true;
-                renterMoney.visible = true;
-                menuBar.visible = true;
-                stack.showRenterMoneyView();
-            }
-        }
-
-        function onSuccessfulLogOut() {
+        function onLogoutSuccesful(){
             lenderCars.visible = false;
             lenderMoney.visible = false;
             menuBar.visible = false;
@@ -188,6 +152,9 @@ ApplicationWindow {
             renterMoney.visible = false;
             stack.showLoginView();
         }
-        */
+
+        function onCarAdded(){
+            stack.showOwnerCarsView()
+        }
     }
 }

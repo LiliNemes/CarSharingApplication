@@ -6,23 +6,23 @@
 #include <QJsonDocument>
 #include "networkaccess.h"
 #include <QUrl>
+#include <QDateTime>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
 
 NetworkAccess::NetworkAccess(QObject* pParent) : QObject(pParent)
 {
     basePath = "http://localhost:8889";
     registerPath = "/users/register";
-    loginPath = "/login";
+    loginPath = "/users/login";
     logoutPath = "/logout";
+    carsPath = "/cars";
+    bookingsPath = "/bookings";
+
 
     network_access_manager = new QNetworkAccessManager(pParent);
     network_access_manager->connectToHost("localhost", 8889);
-    getAll();
-    //bool bConnected = QObject::connect(network_access_manager, &QNetworkAccessManager::finished,
-     //       this, &NetworkAccess::slotReplyFinished);
-
-    //Q_ASSERT_X(bConnected, "NetworkCommunication", "can not connect signal QNetworkAccessManager::finished - slot NetworkCommunication::slotReplyFinished");
-
 }
 
 NetworkAccess::~NetworkAccess()
@@ -32,12 +32,6 @@ NetworkAccess::~NetworkAccess()
         delete network_access_manager;
     }
 }
-/*
-void NetworkAccess::login(const QString& email, const QString& password)
-{
-
-}
-*/
 
 void NetworkAccess::createAccount(const QString& email, const QString& password, const bool& type)
 {
@@ -66,10 +60,7 @@ void NetworkAccess::createAccount(const QString& email, const QString& password,
     QNetworkRequest request;
     request.setUrl(QUrl(basePath+registerPath));
     request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
-    //QString auth = QString("%1:%2").arg(email, password);
-    //QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
-    //QByteArray authHeader = "Basic " + base64EncodedHeader;
-    //request.setRawHeader("Authorization", authHeader);
+
     QNetworkReply *reply = network_access_manager->post(request, postBody);
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         registrationReplyFinished(reply);
@@ -109,6 +100,7 @@ void NetworkAccess::getAllReplyFinished(QNetworkReply *reply)
     {
         qDebug() << "Network connection successful" ;
 
+
     }
     else
     {
@@ -118,182 +110,483 @@ void NetworkAccess::getAllReplyFinished(QNetworkReply *reply)
     reply->deleteLater();
 }
 
-/*
-void NetworkAccess::slotReplyFinished(QNetworkReply *pReply)
+void NetworkAccess::login(const QString& email, const QString& password)
 {
-    if(pReply)
-    {
-        for(qsizetype  i=0; i<m_listReplys.size(); i++)
-        {
-            if(m_listReplys.at(i).second == pReply)
-            {
-                if(pReply->request().url().path().endsWith(m_authPath))
-                {
-                    emit communicationFinished();
-                    handleCreateAccountResponse(pReply);
-                }
-                else if(pReply->request().url().path().endsWith(m_loginPath))
-                {
-                    emit communicationFinished();
-                    handleLoginResponse(pReply);
-                }
-                else if(pReply->request().url().path().endsWith(m_logoutPath))
-                {
-                    emit communicationFinished();
-                    handleLogoutResponse(pReply);
-                }
-                m_listReplys.removeAt(i);
-            }
+    QJsonObject body {
+        {"email", email},
+        {"password", password}
+
+    };
+    QJsonDocument doc(body);
+    QByteArray postBody = doc.toJson();
+    user_pwd = password;
+    user_email = email;
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(basePath+loginPath));
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+    QString auth = QString("%1:%2").arg(email, password);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply = network_access_manager->post(request, postBody);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        loginReplyFinished(reply);
+    });
+}
+
+void NetworkAccess::loginReplyFinished(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::NoError) {
+        qDebug() << "Network connection successful" ;
+
+        QJsonDocument responseDoc = QJsonDocument::fromJson(reply->readAll());
+        QJsonObject responseObject = responseDoc.object();
+        QString profile = responseObject["role"].toString();
+        user_id = responseObject["user_id"].toInt();
+
+        if(profile == "OWNER"){
+            emit loginSuccesfulOwner();
+        }
+        else {
+            emit loginSuccesfulRenter();
         }
 
+    } else {
+        qDebug() << "Network error:" << reply->errorString();
+        user_email = "";
+        user_pwd = "";
+
     }
+
+    reply->deleteLater();
 }
 
-void NetworkComms::reportErrorToUser(QNetworkReply *pReply)
+void NetworkAccess::logout()
 {
-    if(pReply)
-    {
-        QByteArray byteArrayResponse(pReply->readAll());
-        QString strResponse(QString::fromUtf8(byteArrayResponse));
-        emit reportError("Operation unsuccessful" + (strResponse.isEmpty() ? "" : (": " + strResponse)));
-    }
-}
-
-void NetworkComms::addAuthHeader(QNetworkRequest& request)
-{
-    QString credentialsString = QString("%1:%2").arg(m_authenticator.user(), m_authenticator.password());
-    QByteArray base64Encoded(credentialsString.toUtf8().toBase64());
-    QByteArray headerData = "Basic " + base64Encoded;
-    request.setRawHeader("Authorization", headerData);
-}
-
-void NetworkComms::sendRequest(const QString& strPath, bool bAuth, bool bNotifyStart)
-{
-    if(bNotifyStart)
-    {
-        emit communicationStarted();
-    }
     QNetworkRequest request;
-    request.setUrl(QUrl(m_baseUrl+strPath));
-    request.setTransferTimeout();
-    if(bAuth)
-    {
-        addAuthHeader(request);
-    }
-    m_listReplys.append(qMakePair("GET", m_pNetManager->get(request)));
+    request.setUrl(QUrl(basePath+logoutPath));
+
+    QNetworkReply *reply = network_access_manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        logoutReplyFinished(reply);
+    });
 }
 
-void NetworkComms::sendDelete(const QString& strPath, bool bAuth, bool bNotifyStart)
+void NetworkAccess::logoutReplyFinished(QNetworkReply *reply)
 {
-    if(bNotifyStart)
-    {
-        emit communicationStarted();
+    if (reply->error() == QNetworkReply::NoError) {
+        qDebug() << "Logout successful";
+
+        // Emit the signal to indicate successful logout
+        user_id = 0;
+        user_email = "";
+        user_pwd="";
+        cars.clear();
+        emit logoutSuccesful();
+
+    } else {
+        qDebug() << "Logout error:" << reply->errorString();
+
     }
-    QNetworkRequest request;
-    request.setUrl(QUrl(m_baseUrl+strPath));
-    request.setTransferTimeout();
-    if(bAuth)
-    {
-        addAuthHeader(request);
-    }
-    m_listReplys.append(qMakePair("DEL", m_pNetManager->deleteResource(request)));
+
+    reply->deleteLater();
 }
 
-void NetworkComms::sendPostOrPut(const QString& strPath, const QByteArray& body, bool bPost, bool bAuth, bool bNotifyStart)
+void NetworkAccess::fetchCarsForRent() {
+    QUrl url(basePath + carsPath +"/available");
+    QNetworkRequest request(url);
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply= network_access_manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        fetchCarsForRentReplyFinished(reply);
+    });
+}
+
+
+void NetworkAccess::fetchCarsForRentReplyFinished(QNetworkReply *reply)
 {
-    if(bNotifyStart)
-    {
-        emit communicationStarted();
-    }
-    QNetworkRequest request;
-    request.setUrl(QUrl(m_baseUrl+strPath));
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setTransferTimeout();
-    if(bAuth)
-    {
-        addAuthHeader(request);
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if(doc.isArray()){
+            QJsonArray jsonArray = doc.array();
+            for (const QJsonValue &value : jsonArray) {
+                QJsonObject obj = value.toObject();
+                emit carsForRentFetched(obj["model"].toString(), obj["location"].toString(), obj["price"].toDouble(),
+                        obj["owner"].toString(), obj["licensePlate"].toString(), obj["releaseYear"].toInt());
+            }
+        }
+        else{
+            qDebug() << "Problem with QJsonDocument not containing an array";
+        }
+
+    } else {
+        qDebug() << "Network error:" << reply->errorString();
     }
 
-    if(bPost)
+    reply->deleteLater();
+}
+
+void NetworkAccess::fetchCarsForOwner() {
+    QUrl url(basePath + carsPath+ "/user/" +(QString::number(user_id)));
+    QNetworkRequest request(url);
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply= network_access_manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        fetchCarsForOwnerReplyFinished(reply);
+    });
+}
+
+void NetworkAccess::fetchCarsForOwnerReplyFinished(QNetworkReply *reply){
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if(doc.isArray()){
+            QJsonArray jsonArray = doc.array();
+            for (const QJsonValue &value : jsonArray) {
+                QJsonObject obj = value.toObject();
+                emit carsForOwnerFetched(obj["model"].toString(), obj["location"].toString(), obj["price"].toDouble(),
+                                        obj["owner"].toString(), obj["licensePlate"].toString(), obj["releaseYear"].toInt());
+            }
+        }
+        else{
+            qDebug() << "Problem with QJsonDocument not containing an array";
+        }
+
+    } else {
+        qDebug() << "Network error:" << reply->errorString();
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkAccess::addNewCar(const QString& licence_plate, const QString& model, int release_year, double price_for_day, const QString address, double gps_x, double gps_y)
+{
+    QJsonObject body {
+        {"licensePlate", licence_plate},
+        {"model", model},
+        {"releaseYear", release_year},
+        {"price", price_for_day},
+        {"location", QJsonObject{
+                         {"address", address},
+                         {"gps_height", gps_x},
+                         {"gps_width", gps_y}
+                     }},
+        {"owner", QJsonObject{
+                     {"user_id", user_id}
+                 }}
+    };
+
+    QJsonDocument doc(body);
+    QByteArray postBody = doc.toJson();
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(basePath+carsPath));
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply = network_access_manager->post(request, postBody);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        addCarReplyFinished(reply);
+    });
+}
+
+void NetworkAccess::addCarReplyFinished(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::NoError)
     {
-        m_listReplys.append(qMakePair("POST", m_pNetManager->post(request, body)));
+        qDebug() << "Network connection successful" ;
+        emit carAdded();
+
     }
     else
     {
-        m_listReplys.append(qMakePair("PUT", m_pNetManager->put(request, body)));
+        qDebug() << "Network error:" << reply->errorString();
     }
+    // Clean up the reply object
+    reply->deleteLater();
 }
 
-void NetworkComms::createAccount(const QString& firstName, const QString& lastName, const QString& email, const QString& password)
+void NetworkAccess::deleteCar(const QString& licensePlate)
 {
-    QByteArray body("{\"firstName\":\"" + firstName.toUtf8() + "\",\"lastName\":\"" + lastName.toUtf8() + "\",\"email\":\"" +
-                             email.toUtf8() + "\",\"password\":\"" + password.toUtf8() + "\"}");
-    sendPostOrPut(m_authPath, body, true);
+    QNetworkRequest request;
+    request.setUrl(QUrl(basePath+carsPath+ "/car/"+licensePlate));
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply = network_access_manager->deleteResource(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        carDeletedReplyFinished(reply);
+    });
 }
 
-void NetworkComms::handleCreateAccountResponse(QNetworkReply *pReply)
+void NetworkAccess::carDeletedReplyFinished(QNetworkReply *reply)
 {
-    if(pReply)
+    if (reply->error() == QNetworkReply::NoError)
     {
-        QNetworkReply::NetworkError err = pReply->error();
-        if(err == QNetworkReply::NoError)
-        {
-            emit accountCreated();
-        }
-        else
-        {
-            reportErrorToUser(pReply);
-        }
+        qDebug() << "Network connection successful" ;
+        emit carDeleted();
+
     }
-}
-
-void NetworkComms::login(const QString& email, const QString& password)
-{
-    QByteArray body("{\"email\":\"" + email.toUtf8() + "\",\"password\":\"" + password.toUtf8() + "\"}");
-    m_authenticator.setUser(email);
-    m_authenticator.setPassword(password);
-    sendPostOrPut(m_loginPath, body, true);
-}
-
-void NetworkComms::handleLoginResponse(QNetworkReply *pReply)
-{
-    if(pReply)
+    else
     {
-        QNetworkReply::NetworkError err = pReply->error();
-        if(err == QNetworkReply::NoError)
-        {
-            // TODO gather role from pReply and change the param accordingly
-            emit successfulSignIn("renter");
-        }
-        else
-        {
-            reportErrorToUser(pReply);
-        }
+        qDebug() << "Network error:" << reply->errorString();
     }
+    // Clean up the reply object
+    reply->deleteLater();
 }
 
-void NetworkComms::logout()
+void NetworkAccess::makeBooking(const QString licensePlate)
 {
-    sendRequest(m_logoutPath);
+    QJsonObject body {
+        {"car", QJsonObject{{"licensePlate", licensePlate}}},
+        {"user", QJsonObject{{"user_id", user_id}}}
+    };
+
+    QJsonDocument doc(body);
+    QByteArray postBody = doc.toJson();
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(basePath+bookingsPath));
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply = network_access_manager->post(request, postBody);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        addBookingReplyFinished(reply);
+    });
 }
 
-void NetworkComms::handleLogoutResponse(QNetworkReply *pReply)
+void NetworkAccess::addBookingReplyFinished(QNetworkReply *reply)
 {
-    if(pReply)
+    if (reply->error() == QNetworkReply::NoError)
     {
-        QNetworkReply::NetworkError err = pReply->error();
-        if(err == QNetworkReply::NoError)
-        {
-            emit successfulLogOut();
-        }
-        else
-        {
-            reportErrorToUser(pReply);
-        }
+        qDebug() << "Network connection successful" ;
+        emit bookingSent();
+
     }
+    else
+    {
+        qDebug() << "Network error:" << reply->errorString();
+    }
+    // Clean up the reply object
+    reply->deleteLater();
 }
 
-void NetworkComms::addNewCar(const QString& licencePlate, const QString&  carModel, const QString& releaseYear)
+void NetworkAccess::fetchBookings()
 {
+    QUrl url(basePath + bookingsPath+ "/users/" +(QString::number(user_id)));
+    QNetworkRequest request(url);
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply= network_access_manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        fetchBookingsFinished(reply);
+    });
+}
 
-}*/
+void NetworkAccess::fetchBookingsFinished(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if(doc.isArray()){
+            QJsonArray jsonArray = doc.array();
+            for (const QJsonValue &value : jsonArray) {
+                QJsonObject obj = value.toObject();
+
+                double price = obj["car"].toObject()["price"].toDouble();
+                if(obj["end_time"].isNull()){
+                    emit bookingsFetchedGoing(obj["bookingId"].toInt(), obj["car"].toObject()["licensePlate"].toString(), obj["start_time"].toString(), price);
+                }
+                else{
+                    if(obj["review"].isNull())
+                        emit bookingsFetchedEnded(obj["bookingId"].toInt(), obj["car"].toObject()["licensePlate"].toString(), obj["start_time"].toString(), obj["end_time"].toString(), price, true);
+                    else{
+                        emit bookingsFetchedEnded(obj["bookingId"].toInt(), obj["car"].toObject()["licensePlate"].toString(), obj["start_time"].toString(), obj["end_time"].toString(), price, false);
+                    }
+
+                }
+            }
+        }
+        else{
+            qDebug() << "Problem with QJsonDocument not containing an array";
+        }
+
+    } else {
+        qDebug() << "Network error:" << reply->errorString();
+    }
+
+    reply->deleteLater();
+}
+
+void NetworkAccess::endBooking(int bookingNumber)
+{
+    QJsonObject body {
+        {"bookingId", bookingNumber},
+        {"user", QJsonObject{{"user_id", user_id}}}
+    };
+
+    QJsonDocument doc(body);
+    QByteArray postBody = doc.toJson();
+    QNetworkRequest request;
+    request.setUrl(QUrl(basePath+bookingsPath + "/stop"));
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply = network_access_manager->put(request, postBody);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        endBookingReply(reply);
+    });
+}
+
+void NetworkAccess::endBookingReply(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        qDebug() << "Network connection successful" ;
+        emit endBookingFinished();
+
+    }
+    else
+    {
+        qDebug() << "Network error:" << reply->errorString();
+    }
+    // Clean up the reply object
+    reply->deleteLater();
+}
+
+void NetworkAccess::clickedOnReview(int bookingId)
+{
+    bookingReviewId = bookingId;
+}
+
+
+
+void NetworkAccess::addNewBooking(const QString& reviewRating, const QString& reviewText)
+{
+    int rating = reviewRating.toInt();
+    QJsonObject body {
+        {"rating", rating},
+        {"comment", reviewText},
+        {"author", QJsonObject{{"user_id", user_id}}},
+        {"booking", QJsonObject{{"bookingId", bookingReviewId}}}
+    };
+
+    QJsonDocument doc(body);
+    QByteArray postBody = doc.toJson();
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(basePath+"/reviewratings"));
+    request.setHeader( QNetworkRequest::ContentTypeHeader, "application/json" );
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply = network_access_manager->post(request, postBody);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        addNewReviewReplyFinished(reply);
+    });
+}
+
+void NetworkAccess::addNewReviewReplyFinished(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        qDebug() << "Network connection successful" ;
+        emit endAddReviewFinished();
+
+    }
+    else
+    {
+        qDebug() << "Network error:" << reply->errorString();
+    }
+    // Clean up the reply object
+    reply->deleteLater();
+}
+
+void NetworkAccess::backFromReview()
+{
+    bookingReviewId = -1;
+}
+
+void NetworkAccess::fetchStatistics(const QString& carId)
+{
+    QUrl url(basePath + "/reviewratings/car/" +carId);
+    QNetworkRequest request(url);
+    QString auth = QString("%1:%2").arg(user_email, user_pwd);
+    QByteArray base64EncodedHeader(auth.toUtf8().toBase64());
+    QByteArray authHeader = "Basic " + base64EncodedHeader;
+    request.setRawHeader("Authorization", authHeader);
+    QNetworkReply *reply= network_access_manager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        fetchStatisticsFinished(reply);
+    });
+}
+
+void NetworkAccess::fetchStatisticsFinished(QNetworkReply *reply)
+{
+    int ratings_1 =0;
+    int ratings_2 =0;
+    int ratings_3 =0;
+    int ratings_4 =0;
+    int ratings_5 =0;
+
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if(doc.isArray()){
+            QJsonArray jsonArray = doc.array();
+            for (const QJsonValue &value : jsonArray) {
+                QJsonObject obj = value.toObject();
+                if(obj["rating"]==1){
+                    ratings_1++;
+                }
+                else if(obj["rating"]==2){
+                    ratings_2++;
+                }
+                else if(obj["rating"]==3){
+                    ratings_3++;
+                }
+                else if(obj["rating"]==4){
+                    ratings_4++;
+                }
+                else if(obj["rating"]==5){
+                    ratings_5++;
+                }
+            }
+            emit ratingsFetchingFinished(ratings_1, ratings_2, ratings_3, ratings_4, ratings_5);
+        }
+        else{
+            qDebug() << "Problem with QJsonDocument not containing an array";
+        }
+
+    } else {
+        qDebug() << "Network error:" << reply->errorString();
+    }
+
+    reply->deleteLater();
+
+}
+
+
+QList<Car> NetworkAccess::getCars() const {
+    return cars;
+}

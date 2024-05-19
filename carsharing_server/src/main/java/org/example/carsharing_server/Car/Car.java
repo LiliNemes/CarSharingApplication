@@ -1,9 +1,12 @@
 package org.example.carsharing_server.Car;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import org.example.carsharing_server.Booking.Booking;
 import org.example.carsharing_server.CarMaintenance.CarMaintenance;
@@ -19,26 +22,35 @@ public class Car {
 
     @Id
     @Column(unique = true)
-    @Pattern(regexp = "[a-zA-Z].. [0-9]..")
+    @Pattern(regexp = "[a-zA-Z]..[0-9]..")
+    @NotBlank
     private String licensePlate;
+
+    @NotBlank
     private String model;
+
+    @Min(1672)
     private int releaseYear;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Min(1)
+    private double price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "locationID", referencedColumnName = "locationID")
     private Location location;
-    private boolean availabilityStatus;
+
+    private boolean availabilityStatus=true;
 
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CarMaintenance> maintenanceRecord;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userID", referencedColumnName = "userID")
     private User owner;
 
-
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Booking> bookings;
 
 
@@ -50,16 +62,16 @@ public class Car {
         this.licensePlate = plate;
     }
 
-    public Car(String model, int releaseYear, String licensePlate, Location location, User owner) {
+    public Car(String model, int releaseYear, String licensePlate, Location location, User owner, double price) {
         this.model = model;
         this.releaseYear = releaseYear;
         this.licensePlate = licensePlate;
-        this.maintenanceRecord = new ArrayList<CarMaintenance>();
-        this.location = location;
-        this.availabilityStatus = true;
+        this.price = price;
         this.owner = owner;
+        this.location = location;
+        this.maintenanceRecord = new ArrayList<CarMaintenance>();
+        this.availabilityStatus = true;
         this.bookings = new ArrayList<>();
-
     }
 
 
@@ -119,14 +131,21 @@ public class Car {
         this.bookings = bookings;
     }
 
-    public User getOwnerId() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwnerId(User owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
     @Override
     public String toString() {
@@ -142,75 +161,3 @@ public class Car {
     }
 
 }
-/*
-class CarDAO {
-    private Connection connection;
-
-    public CarDAO() {
-        try {
-            connection = DriverManager.getConnection("", "username", "password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addCar(Car car) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO cars (model, release_year, location, availability_status, license_plate, maintenance_record) VALUES (?, ?, ?, ?, ?, ?)");
-            preparedStatement.setString(1, car.getModel());
-            preparedStatement.setInt(2, car.getReleaseYear());
-            preparedStatement.setString(3, car.getLocation());
-            preparedStatement.setString(4, car.getAvailabilityStatus());
-            preparedStatement.setString(5, car.getLicensePlate());
-            preparedStatement.setString(6, car.getMaintenanceRecord());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Car getCarById(int carId) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM cars WHERE car_id=?");
-            preparedStatement.setInt(1, carId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                String model = resultSet.getString("model");
-                int releaseYear = resultSet.getInt("release_year");
-                String location = resultSet.getString("location");
-                String availabilityStatus = resultSet.getString("availability_status");
-                String licensePlate = resultSet.getString("license_plate");
-                String maintenanceRecord = resultSet.getString("maintenance_record");
-                return new Car(carId, model, releaseYear, location, availabilityStatus, licensePlate, maintenanceRecord);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public List<Car> getAllCars() {
-        List<Car> cars = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM cars");
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int carId = resultSet.getInt("car_id");
-                String model = resultSet.getString("model");
-                int releaseYear = resultSet.getInt("release_year");
-                Location location = resultSet.getString("location");
-                boolean availabilityStatus = resultSet.getString("availability_status");
-                String licensePlate = resultSet.getString("license_plate");
-                CarMaintenance maintenanceRecord = resultSet.getString("maintenance_record");
-                cars.add(new Car(carId, model, releaseYear, location, availabilityStatus, licensePlate, maintenanceRecord));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return cars;
-    }
-
-  }
-*/
-
-

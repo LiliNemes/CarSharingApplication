@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="/QtQuick/Studio/Utils/">
-    <file alias="JsonListModel.qml">/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-src/src/imports/utils/JsonListModel.qml</file>
-    <file alias="JsonBackend.qml">/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-src/src/imports/utils/JsonBackend.qml</file>
-    <file alias="ChildListModel.qml">/home/sally-alala/Desktop/client/Carshare/build/Desktop_Qt_6_7_0-Debug/_deps/ds-src/src/imports/utils/ChildListModel.qml</file>
-  </qresource>
-</RCC>
-

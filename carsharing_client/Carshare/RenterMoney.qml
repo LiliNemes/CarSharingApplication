@@ -156,6 +156,15 @@ Page {
             radius: 12
         }
 
+        Button {
+            id: buttonLogin
+            text: "Upload money"
+            focus: true
+            onClicked: {
+
+            }
+        }
+
         states: [
             State {
                 name: "clicked"

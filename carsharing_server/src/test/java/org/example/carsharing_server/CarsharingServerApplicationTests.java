@@ -1,10 +1,17 @@
 package org.example.carsharing_server;
 
 import org.example.carsharing_server.Car.*;
+import org.example.carsharing_server.Location.LocationRepository;
+import org.example.carsharing_server.Location.LocationService;
+import org.example.carsharing_server.Location.LocationServiceImpl;
+import org.example.carsharing_server.User.UserRepository;
+import org.example.carsharing_server.User.UserService;
+import org.example.carsharing_server.User.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -18,11 +25,19 @@ class CarsharingServerApplicationTest {
 	Car car;
 	CarController carController;
 	CarRepository carRepository;
+    @Autowired
+    private LocationRepository locationRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 	@BeforeEach
 	public void init(){
 		carRepository = Mockito.mock(CarRepository.class);
-		CarService carService = new CarServiceImpl(carRepository);
+		locationRepository = Mockito.mock(LocationRepository.class);
+		LocationService locationService = new LocationServiceImpl(locationRepository);
+		userRepository = Mockito.mock(UserRepository.class);
+		UserService userService = new UserServiceImpl(userRepository);
+		CarService carService = new CarServiceImpl(carRepository, locationService, userService);
 		carController = new CarController(carService);
 		car = new Car();
 	}

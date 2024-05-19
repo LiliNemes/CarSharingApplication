@@ -2,7 +2,14 @@ package org.example.carsharing_server.Car;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +20,7 @@ public class CarController {
 
     private final CarService carService;
 
+    @Autowired
     public CarController(CarService carService) {this.carService = carService;}
 
     @GetMapping
@@ -29,35 +37,35 @@ public class CarController {
     }
 
     @PostMapping
-    public void addNewCar(@RequestBody Car car) {
+    public void addNewCar(@Valid @RequestBody Car car, @AuthenticationPrincipal UserDetails userDetails) {
         try {
-            carService.addNewCar(car);
+            carService.addNewCar(car, userDetails);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
     @PutMapping
-    public void updateCar(@RequestBody Car car) {
+    public void updateCar(@Valid @RequestBody Car car, @AuthenticationPrincipal UserDetails userDetails) {
         try {
-            carService.updateCar(car);
+            carService.updateCar(car, userDetails);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
-    @DeleteMapping("/{licensePlate}")
-    public void deleteCars(@PathVariable String licensePlate) {
+    @DeleteMapping("/car/{licensePlate}")
+    public void deleteCars(@Valid @PathVariable("licensePlate") @NotBlank @Size(min = 6, max = 6) String licensePlate, @AuthenticationPrincipal UserDetails userDetails) {
         try {
-            carService.deleteCar(licensePlate);
+            carService.deleteCar(licensePlate, userDetails);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
-    @GetMapping("/{locationId}")
-    public ResponseEntity<String> getAvailableCars(@PathVariable String locationId) {
-        List<Car> cars = carService.getAvailableCars(Integer.parseInt(locationId));
+    @GetMapping("/available")
+    public ResponseEntity<String> getAvailableCars() {
+        List<Car> cars = carService.getAvailableCars();
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
         try {
@@ -68,9 +76,9 @@ public class CarController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<String> getOwnedCars(@PathVariable String userId) {
-        List<Car> cars = carService.getOwnedCars(userId);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<String> getOwnedCars(@Valid @PathVariable @Min(1) Integer userId, @AuthenticationPrincipal UserDetails userDetails) {
+        List<Car> cars = carService.getOwnedCars(userId, userDetails);
         ObjectMapper objectMapper = new ObjectMapper();
         String res;
         try {

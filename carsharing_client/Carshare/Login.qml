@@ -100,17 +100,8 @@ Page {
                 textPasswordError.visible = false;
                 rectPassword.border.color = "black";
                 rectEmail.border.color = "black";
-                if (!userinputvalidator.validateEmail(inputEmail.text)) {
-                    rectEmail.border.color = "red";
-                    textPasswordError.text = "Invalid email address";
-                    textPasswordError.visible = true;
-                } else if (inputPassword.text.length === 0) {
-                    rectPassword.border.color = "red";
-                    textPasswordError.text = "Password cannot be empty";
-                    textPasswordError.visible = true;
-                } else {
-                    communication.login(inputEmail.text, inputPassword.text);
-                }
+
+                communication.login(inputEmail.text, inputPassword.text);
             }
         }
 

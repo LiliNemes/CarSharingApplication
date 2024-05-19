@@ -1,15 +1,22 @@
 package org.example.carsharing_server.ReviewRating;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
-interface ReviewRatingService {
+public interface ReviewRatingService {
     List<ReviewRating> getReviewRatings();
 
-    void addNewReviewRating(ReviewRating reviewRating);
+    void addNewReviewRating(ReviewRating reviewRating, UserDetails userDetails);
 
-    List<ReviewRating> getUsersReviewRating(String userId);
+    List<ReviewRating> getUsersReviewRating(int userId);
 
-    List<ReviewRating> getBookingsReviewRating(String bookingId);
+    Optional<ReviewRating> getBookingsReviewRating(int bookingId);
+
+    Optional<ReviewRating> getReviewRating(int reviewRatingId);
+
+    List<ReviewRating> getCarsReviewRating(String licensePlate);
 }

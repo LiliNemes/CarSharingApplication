@@ -1,27 +1,16 @@
 package org.example.carsharing_server.Location;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import org.example.carsharing_server.Booking.Booking;
 import org.example.carsharing_server.Car.Car;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/*class LocationDAO {
-    private Connection connection;
-
-    public LocationDAO() {
-        try {
-            connection = DriverManager.getConnection("", "username", "password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-}
-*/
 
 @Entity
 @Table
@@ -34,14 +23,20 @@ public class Location {
     private double GPS_width;
 
     private double GPS_height;
+
+    @NotBlank
     private String address;
 
     @OneToMany(mappedBy="location", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Car> cars_here;
 
     @OneToMany(mappedBy="pickup_location", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Booking> started_here;
+
     @OneToMany(mappedBy="dropoff_location", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Booking> ended_here;
 
     public Location(){

@@ -1,9 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/Carshare/">
-    <file alias="Constants.qml">/home/sally-alala/Desktop/client/Carshare/imports/Carshare/Constants.qml</file>
-    <file alias="DirectoryFontLoader.qml">/home/sally-alala/Desktop/client/Carshare/imports/Carshare/DirectoryFontLoader.qml</file>
-    <file alias="EventListModel.qml">/home/sally-alala/Desktop/client/Carshare/imports/Carshare/EventListModel.qml</file>
-    <file alias="EventListSimulator.qml">/home/sally-alala/Desktop/client/Carshare/imports/Carshare/EventListSimulator.qml</file>
-  </qresource>
-</RCC>
-

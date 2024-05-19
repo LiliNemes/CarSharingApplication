@@ -1,4 +1,0 @@
-module Main
-typeinfo CarshareApp.qmltypes
-prefer :/qt/qml/Main/
-

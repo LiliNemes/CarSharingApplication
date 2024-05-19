@@ -2,19 +2,13 @@ import QtQuick 6.2
 import QtQuick.Controls 6.2
 
 Page {
-    width: Constants.width
-    height: Constants.height
 
     visible: true
     title: "Add a new car"
 
     Rectangle {
         id: rectangle
-        width: Constants.width
-        height: Constants.height
         anchors.fill: parent
-
-        color: Constants.backgroundColor
 
         Label {
             id: addNewCar__Title
@@ -36,11 +30,16 @@ Page {
             width: 265
             height: 28
             color: "#ffffff"
-            radius: 12
+            border.color: "black"
 
             TextInput {
                 id: releaseYear__input
                 anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                activeFocusOnPress: true
+                cursorVisible: true
                 font.pixelSize: 16
             }
         }
@@ -72,15 +71,111 @@ Page {
             text: qsTr("Model:")
         }
 
-        Button {
-            id: submit__button
-            x: 245
-            y: 294
-            text: qsTr("Submit")
-            onClicked: {
-                communication.addNewCar(licencePlate__input.text, carModel__input.text, releaseYear__input.text)
+        Label {
+            id: labelPrice
+            x: 132
+            y: 287
+            width: 80
+            height: 21
+            text: qsTr("Price for a day:")
+        }
+
+        Label {
+            id: labelLocation
+            x: 132
+            y: 341
+            width: 80
+            height: 21
+            text: qsTr("Location:")
+        }
+
+        Label {
+            id: labelAddress
+            x: 202
+            y: 341
+            width: 80
+            height: 21
+            text: qsTr("Address:")
+        }
+
+        Rectangle {
+            id: rectangleAddress
+            x: 282
+            y: 341
+            width: 265
+            height: 28
+            color: "white"
+            border.color: "black"
+            TextInput {
+                id: carAddress__input
+                anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                activeFocusOnPress: true
+                cursorVisible: true
+                font.pixelSize: 16
             }
         }
+
+        Label {
+            id: labelGps_x
+            x: 202
+            y: 395
+            width: 80
+            height: 21
+            text: qsTr("GPS x:")
+        }
+
+        Rectangle {
+            id: rectangleGps_x
+            x: 282
+            y: 395
+            width: 265
+            height: 28
+            color: "#ffffff"
+            border.color: "black"
+            TextInput {
+                id: carGps_x__input
+                anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                activeFocusOnPress: true
+                cursorVisible: true
+                font.pixelSize: 16
+            }
+        }
+
+        Label {
+            id: labelGps_y
+            x: 202
+            y: 449
+            width: 80
+            height: 21
+            text: qsTr("GPS y:")
+        }
+
+        Rectangle {
+            id: rectangleGps_y
+            x: 282
+            y: 449
+            width: 265
+            height: 28
+            color: "#ffffff"
+            border.color: "black"
+            TextInput {
+                id: carGps_y__input
+                anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                activeFocusOnPress: true
+                cursorVisible: true
+                font.pixelSize: 16
+            }
+        }
+
 
         Rectangle {
             id: rectangle2
@@ -89,10 +184,15 @@ Page {
             width: 265
             height: 28
             color: "#ffffff"
-            radius: 12
+            border.color: "black"
             TextInput {
                 id: licencePlate__input
                 anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                activeFocusOnPress: true
+                cursorVisible: true
                 font.pixelSize: 16
             }
         }
@@ -104,10 +204,35 @@ Page {
             width: 265
             height: 28
             color: "#ffffff"
-            radius: 12
+            border.color: "black"
             TextInput {
                 id: carModel__input
                 anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                activeFocusOnPress: true
+                cursorVisible: true
+                font.pixelSize: 16
+            }
+        }
+
+        Rectangle {
+            id: rectangle5
+            x: 228
+            y: 287
+            width: 265
+            height: 28
+            color: "#ffffff"
+            border.color: "black"
+            TextInput {
+                id: carPrice__input
+                anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignVCenter
+                activeFocusOnPress: true
+                cursorVisible: true
                 font.pixelSize: 16
             }
         }
@@ -118,7 +243,17 @@ Page {
             y: 21
             text: qsTr("Back")
             onClicked: {
-                stack.showLenderCarsView();
+                stack.showOwnerCarsView();
+            }
+        }
+        Button {
+            id: submit__button
+            x: 245
+            y: 503
+            text: qsTr("Submit")
+            onClicked: {
+                communication.addNewCar(licencePlate__input.text, carModel__input.text, releaseYear__input.text, carPrice__input.text,
+                 carAddress__input.text, carGps_x__input.text, carGps_y__input.text)
             }
         }
 
