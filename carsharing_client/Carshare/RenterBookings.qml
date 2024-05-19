@@ -40,7 +40,7 @@ Page {
 
                     Row {
                         spacing: 10
-                        Text { text: qsTr("Price per day:") }
+                        Text { text: qsTr("Price per minute:") }
                         Text { text: pricePerDay }
                     }
 
