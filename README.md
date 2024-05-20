@@ -4,11 +4,11 @@ Csapatnév: MárNemSzámít
 
 Csapattagok Neptun kóddal:
 - Nemes Lili (GLJD1D)
-- Minta Mókus (ABC123)
-- Minta Mókus (ABC123)
+- Jónás Dávid (Q3DSYA)
+- Alala Saly (O373VK)
 
 Bemutató videó URL: 
-(Ugye minden olyan dolog szerepel benne a kiírásnak megfelelően, amire pontot szeretnétek kapni?)
+https://bmeedu-my.sharepoint.com/personal/jonas_david_edu_bme_hu/_layouts/15/stream.aspx?id=%2Fpersonal%2Fjonas%5Fdavid%5Fedu%5Fbme%5Fhu%2FDocuments%2FMicrosoft%20Teams%2Dcseveg%C3%A9si%20f%C3%A1jlok%2FAlf%5Fdone%201%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eb3c23b7c%2D1762%2D43cd%2Daa44%2De5714dd99bc5
 
 **Pontot érő technológiák**
 (Amit elkészítettetek, azt X-eljétek be!)
