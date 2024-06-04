@@ -77,7 +77,7 @@ Page {
             y: 287
             width: 80
             height: 21
-            text: qsTr("Price for a day:")
+            text: qsTr("Price for a minute:")
         }
 
         Label {
