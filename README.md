@@ -3,12 +3,11 @@
 Csapatnév: MárNemSzámít
 
 Csapattagok Neptun kóddal:
-- Nemes Lili (GLJD1D)
-- Jónás Dávid (Q3DSYA)
-- Alala Saly (O373VK)
+- Nemes Lili
+- Jónás Dávid
+- Alala Saly
 
-Bemutató videó URL: 
-https://bmeedu-my.sharepoint.com/personal/jonas_david_edu_bme_hu/_layouts/15/stream.aspx?id=%2Fpersonal%2Fjonas%5Fdavid%5Fedu%5Fbme%5Fhu%2FDocuments%2FMicrosoft%20Teams%2Dcseveg%C3%A9si%20f%C3%A1jlok%2FAlf%5Fdone%201%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eb3c23b7c%2D1762%2D43cd%2Daa44%2De5714dd99bc5
+[Bemutató videó URL](https://bmeedu-my.sharepoint.com/personal/jonas_david_edu_bme_hu/_layouts/15/stream.aspx?id=%2Fpersonal%2Fjonas%5Fdavid%5Fedu%5Fbme%5Fhu%2FDocuments%2FMicrosoft%20Teams%2Dcseveg%C3%A9si%20f%C3%A1jlok%2FAlf%5Fdone%201%2Emp4&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Eb3c23b7c%2D1762%2D43cd%2Daa44%2De5714dd99bc5)
 
 **Pontot érő technológiák**
 (Amit elkészítettetek, azt X-eljétek be!)
@@ -46,6 +45,6 @@ A hivatalos teljes lista a HF feladatkiírásban található: https://www.aut.bm
 **A videó újrahasznosíthatósága**
 
 A házi feladat videót oktatási célokra újrahasznosíthatjuk? (Későbbi évfolyamoknak bemutatás, vágott anyagban felhasználás.)
-- [ ] Igen, a szerzők megjelölésével
+- [X] Igen, a szerzők megjelölésével
 - [ ] Igen, névtelenül
 - [ ] Nem
